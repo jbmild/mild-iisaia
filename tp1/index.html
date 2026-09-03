@@ -47,11 +47,13 @@
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
 
     body {
       margin: 0;
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       font-family: var(--font-body);
@@ -184,12 +186,12 @@
 
     .hero {
       display: grid;
-      gap: var(--space-lg);
-      padding-block: var(--space-xl) var(--space-lg);
+      gap: var(--space-md);
+      padding-block: var(--space-sm);
     }
 
     @media (min-width: 860px) {
-      .hero { grid-template-columns: 1.15fr 0.85fr; align-items: center; }
+      .hero { grid-template-columns: 1.05fr 0.95fr; align-items: center; }
     }
 
     .kicker {
@@ -251,6 +253,8 @@
       display: block;
       width: 100%;
       height: auto;
+      max-height: 42vh;
+      object-fit: cover;
       filter: contrast(1.15) saturate(1.2);
     }
 
@@ -276,7 +280,7 @@
     }
 
     section.block {
-      padding-block: var(--space-lg);
+      padding-block: var(--space-sm);
       border-top: 1px solid var(--color-border);
     }
 
@@ -418,27 +422,154 @@
     .biblio li { margin-bottom: var(--space-sm); }
     .biblio a { color: var(--color-accent); }
 
-    body > footer {
+    main > footer {
       border-top: 1px solid var(--color-border);
-      padding-block: var(--space-md) var(--space-lg);
+      padding: var(--space-md) var(--space-lg);
       font-size: 0.875rem;
       color: var(--color-muted);
     }
 
-    body > footer p { margin: 0; }
+    main > footer p { margin: 0; }
 
     .empty-filter { display: none; color: var(--color-muted); }
     .empty-filter.is-visible { display: block; }
+
+    main#contenido {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      overflow-y: hidden;
+      overscroll-behavior: none;
+      touch-action: none;
+      scrollbar-color: var(--color-accent) #020500;
+    }
+
+    main#contenido > section,
+    main#contenido > footer {
+      flex: 0 0 100vw;
+      width: 100vw;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding-block: var(--space-sm);
+      margin-inline: 0;
+    }
+
+    #promesa,
+    #objetivos,
+    #unidades,
+    #calendario,
+    #evaluacion,
+    #bibliografia {
+      flex-basis: max-content;
+      width: max-content;
+      min-width: 100vw;
+      padding-inline: var(--space-lg);
+      align-items: flex-start;
+    }
+
+    .split,
+    #unidades .unit-list,
+    #calendario .weeks,
+    #objetivos ul,
+    .card-grid,
+    .eval-grid,
+    .biblio {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      gap: var(--space-md);
+      margin: 0;
+      padding: 0;
+    }
+
+    #objetivos ul { list-style: none; }
+
+    #objetivos li,
+    .biblio li,
+    #unidades .unit,
+    .card,
+    .week,
+    .eval-grid article,
+    .split > * {
+      flex: 0 0 min(22rem, 80vw);
+    }
+
+    #objetivos li,
+    .biblio li {
+      padding: var(--space-md);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow);
+    }
+
+    #portal,
+    #inicio,
+    main#contenido > footer {
+      justify-content: center;
+    }
+
+    #portal {
+      align-items: center;
+      text-align: center;
+      gap: var(--space-md);
+    }
+
+    #portal h1 {
+      font-size: clamp(2.8rem, 10vw, 5.5rem);
+    }
+
+    .mentira {
+      display: inline-block;
+      transform: scaleX(-1);
+      color: var(--color-accent);
+    }
+
+    .brujula {
+      display: flex;
+      justify-content: space-between;
+      width: min(28rem, 86vw);
+      font-size: 2.4rem;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .brujula span:first-child { transform: scaleX(-1); }
+
+    #portal form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      width: min(22rem, 86vw);
+    }
+
+    #portal input[type="range"] {
+      direction: rtl;
+      accent-color: var(--color-accent);
+    }
+
+    #portal .aviso {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      max-width: 36rem;
+    }
   </style>
 </head>
 <body>
   <canvas id="lluvia" aria-hidden="true"></canvas>
-  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <a class="skip-link" href="#portal">Saltar al contenido</a>
 
   <header>
     <div class="wrap masthead">
-      <p class="brand"><a href="#inicio">root@zion:~# iisaia</a></p>
+      <p class="brand"><a href="#portal">root@zion:~# iisaia</a></p>
       <nav aria-label="Secciones">
+        <a href="#portal">Portal</a>
+        <a href="#inicio">Inicio</a>
         <a href="#promesa">Promesa</a>
         <a href="#objetivos">Objetivos</a>
         <a href="#unidades">Unidades</a>
@@ -451,6 +582,25 @@
   </header>
 
   <main id="contenido">
+    <section class="wrap" id="portal" aria-labelledby="titulo-batalla">
+      <p class="kicker">r/badUIbattles · TP 1</p>
+      <h1 id="titulo-batalla">Wake up, supervisor</h1>
+      <p class="aviso">
+        Esta página <strong>solo se desplaza en horizontal</strong>.
+        El eje está al revés: si intentás ir a la izquierda, la pantalla se mueve a la derecha, y al revés.
+      </p>
+      <p class="mentira">Scroll right to continue →</p>
+      <div class="brujula" aria-hidden="true">
+        <span>→</span>
+        <span>←</span>
+      </div>
+      <form action="#inicio" method="get">
+        <label for="confirmacion-eje">Deslizá a la <em>derecha</em> para confirmar (el control también está invertido)</label>
+        <input id="confirmacion-eje" name="ok" type="range" min="0" max="100" value="100">
+      </form>
+      <p class="aviso">La rueda, el trackpad, las flechas y el dedo mienten. El menú de arriba no.</p>
+    </section>
+
     <section class="hero wrap" id="inicio" aria-labelledby="titulo-curso">
       <div>
         <p class="kicker">Diplomatura en desarrollo de aplicaciones utilizando inteligencia artificial</p>
@@ -539,7 +689,7 @@
       <h2 id="titulo-unidades">Unidades</h2>
       <p>Seis unidades temáticas. No coinciden una a una con las ocho clases: la unidad 4 ocupa dos encuentros y la última clase es el Demo Day.</p>
       <div class="unit-list">
-        <details class="unit" open>
+        <details class="unit">
           <summary>Unidad 1 — Funcionamiento de LLMs</summary>
           <p>El átomo del lenguaje (tokens y BPE). Predicción del siguiente token. Pre-training: curación de datos, filtrado, cómputo. Modelos base: autocompletado, in-context learning y cutoff date. Post-training: SFT. Alineación con RLHF. Alucinaciones y mitigación por herramientas. Límites cognitivos y modelos de razonamiento.</p>
         </details>
@@ -700,13 +850,13 @@
         <li>OpenAPI Initiative. <cite>OpenAPI Specification</cite>. <a href="https://spec.openapis.org">spec.openapis.org</a> — Unidad 3.</li>
       </ol>
     </section>
-  </main>
 
-  <footer>
-    <div class="wrap">
-      <p>Jonatan Mild — TP 1. Contenido adaptado del programa de la materia y de <code>Material/</code> (docente: Enzo Pacilio, 2026). Estética inspirada en Matrix; no usa fotogramas de la película.</p>
-    </div>
-  </footer>
+    <footer>
+      <div class="wrap">
+        <p>Jonatan Mild — TP 1. Contenido adaptado del programa de la materia y de <code>Material/</code> (docente: Enzo Pacilio, 2026). Estética inspirada en Matrix; no usa fotogramas de la película. El scroll horizontal está invertido a propósito.</p>
+      </div>
+    </footer>
+  </main>
 
   <script>
     (function () {
@@ -776,11 +926,64 @@
 
       filtro.addEventListener("input", pintarSemanas);
 
+      var pista = document.getElementById("contenido");
+      var lastTouchX = null;
+
+      function invertirScroll(delta) {
+        pista.scrollLeft -= delta;
+      }
+
+      function esCampo(el) {
+        if (!el || !el.tagName) return false;
+        var t = el.tagName.toLowerCase();
+        return t === "input" || t === "textarea" || t === "select" || el.isContentEditable;
+      }
+
+      window.addEventListener("wheel", function (e) {
+        if (esCampo(e.target)) return;
+        e.preventDefault();
+        invertirScroll(e.deltaX + e.deltaY);
+      }, { passive: false });
+
+      pista.addEventListener("touchstart", function (e) {
+        lastTouchX = e.touches[0].clientX;
+      }, { passive: true });
+
+      pista.addEventListener("touchmove", function (e) {
+        var x = e.touches[0].clientX;
+        var dx = x - lastTouchX;
+        lastTouchX = x;
+        e.preventDefault();
+        pista.scrollLeft += dx;
+      }, { passive: false });
+
+      window.addEventListener("keydown", function (e) {
+        if (esCampo(e.target)) return;
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          invertirScroll(-80);
+        } else if (e.key === "ArrowRight") {
+          e.preventDefault();
+          invertirScroll(80);
+        }
+      });
+
+      document.querySelectorAll("body > header nav a, .skip-link, .brand a").forEach(function (a) {
+        a.addEventListener("click", function (e) {
+          var id = a.getAttribute("href");
+          if (!id || id.charAt(0) !== "#") return;
+          var dest = document.querySelector(id);
+          if (!dest) return;
+          e.preventDefault();
+          pista.scrollLeft = dest.offsetLeft;
+        });
+      });
+
       function marcarNav() {
-        var fromTop = window.scrollY + 96;
+        var fromLeft = pista.scrollLeft + 24;
         var current = sections[0];
         sections.forEach(function (sec) {
-          if (sec.offsetTop <= fromTop) current = sec;
+          if (sec.offsetLeft <= fromLeft) current = sec;
         });
         navLinks.forEach(function (a) {
           var on = current && a.getAttribute("href") === "#" + current.id;
@@ -789,7 +992,7 @@
         });
       }
 
-      window.addEventListener("scroll", marcarNav, { passive: true });
+      pista.addEventListener("scroll", marcarNav, { passive: true });
       marcarNav();
 
       function dimensionar() {

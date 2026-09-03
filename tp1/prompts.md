@@ -46,4 +46,19 @@ Now moving forward I want you to change the syle. Want a style based of the movi
 
 ---
 
+## 4 — Bad UI Battle (scroll invertido)
+
+```
+looks amazing, lets commit and push those changes.
+Next, lets add the badUIBattle front of the tp1. I want the page to only scroll horizontally. but if I scroll to the left the screen moves to the right and backwards
+```
+
+**Por qué:** el estilo Matrix quedó; ahora el corte es un frente al estilo r/badUIbattles, con un solo eje de scroll y el sentido al revés.
+
+**Qué devolvió:** commit y push del Matrix (`29a9a39`) y un `index.html` que abre con un portal Bad UI: scroll solo horizontal, invertido en rueda/trackpad/flechas/dedo; el menú de arriba sigue yendo al destino real.
+
+**Qué hice con eso:** lo acepté. Se commitea y se pide sacar el still embebido, un desplazamiento de distancia aleatoria y lluvia a velocidad inestable.
+
+---
+
 ## Conversación completa
