@@ -415,7 +415,12 @@
       overflow-y: hidden;
       overscroll-behavior: none;
       touch-action: none;
-      scrollbar-color: var(--color-accent) #020500;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    main#contenido::-webkit-scrollbar {
+      display: none;
     }
 
     main#contenido > section,
@@ -496,37 +501,8 @@
       font-size: clamp(2.8rem, 10vw, 5.5rem);
     }
 
-    .mentira {
-      display: inline-block;
-      transform: scaleX(-1);
-      color: var(--color-accent);
-    }
-
-    .brujula {
-      display: flex;
-      justify-content: space-between;
-      width: min(28rem, 86vw);
-      font-size: 2.4rem;
-      line-height: 1;
-      user-select: none;
-    }
-
-    .brujula span:first-child { transform: scaleX(-1); }
-
-    #portal form {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-sm);
-      width: min(22rem, 86vw);
-    }
-
-    #portal input[type="range"] {
-      direction: rtl;
-      accent-color: var(--color-accent);
-    }
-
     #portal .aviso {
-      font-size: 0.85rem;
+      font-size: 1rem;
       color: var(--color-muted);
       max-width: 36rem;
     }
@@ -558,20 +534,11 @@
       <p class="kicker">r/badUIbattles · TP 1</p>
       <h1 id="titulo-batalla">Wake up, supervisor</h1>
       <p class="aviso">
-        Esta página <strong>solo se desplaza en horizontal</strong>.
-        El eje está al revés: si intentás ir a la izquierda, la pantalla se mueve a la derecha, y al revés.
+        Esta página <strong>solo se desplaza en horizontal</strong> y no hay barra de scroll.
+        Usá la rueda del mouse (o el gesto del trackpad). El eje está al revés:
+        si intentás ir a la izquierda, la pantalla se mueve a la derecha, y al revés.
         Cada gesto recorre una distancia distinta: a veces casi nada, a veces un salto.
       </p>
-      <p class="mentira">Scroll right to continue →</p>
-      <div class="brujula" aria-hidden="true">
-        <span>→</span>
-        <span>←</span>
-      </div>
-      <form action="#inicio" method="get">
-        <label for="confirmacion-eje">Deslizá a la <em>derecha</em> para confirmar (el control también está invertido)</label>
-        <input id="confirmacion-eje" name="ok" type="range" min="0" max="100" value="100">
-      </form>
-      <p class="aviso">La rueda, el trackpad, las flechas y el dedo mienten. El menú de arriba no.</p>
     </section>
 
     <section class="hero wrap" id="inicio" aria-labelledby="titulo-curso">

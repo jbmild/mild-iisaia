@@ -78,4 +78,31 @@ make the rainning letters change speed so the user gets confused
 
 ---
 
+## 6 — Esconder la barra, solo la explicación
+
+```
+looks perfect, now commit and push the changes. 
+Hide the scroll bar, let only the explanation in the home page so the user uses the mouse scroll and that will trigger the random scrolling ration
+```
+
+**Por qué:** con la barra visible se podía arrastrar el thumb y saltarse la rueda (y el factor aleatorio). Sobran controles en el portal.
+
+**Qué devolvió:** commit y push de still + lluvia/scroll aleatorio (`ccc0dd9`); se ocultó la barra de `main`; el portal queda en título + explicación, sin slider ni flechas mentirosas.
+
+**Qué hice con eso:** lo acepté. “Looks perfecto”; se commitea y se pushea.
+
+---
+
+## 7 — Commit y push de la barra oculta
+
+```
+looks perfecto commit and push the changes.
+```
+
+**Qué devolvió:** commit y push de la barra oculta y el portal reducido a título + explicación (`tp1/index.html`, README y este log).
+
+**Qué hice con eso:** pendiente.
+
+---
+
 ## Conversación completa

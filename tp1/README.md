@@ -21,6 +21,7 @@ Una página de saludo mínima, después una guía completa de la materia, un res
 - Eje único horizontal: cada sección es un panel; unidades, semanas y listas largas se leen de costado para no volver al scroll vertical.
 - Inversión deliberada: rueda, trackpad, flechas y gesto táctil mueven la pista al revés. El menú fijo no miente, para que el docente pueda saltar secciones.
 - Distancia de scroll no lineal: cada gesto toma un factor nuevo (casi nada, un paso, un salto). La lluvia cambia de velocidad por columna y a ráfagas, para desorientar.
+- Barra de scroll oculta. El portal solo explica el truco: hay que usar la rueda, que dispara el factor aleatorio. El menú de arriba sigue pudiendo saltar secciones.
 
 ## Qué salió mal y cómo lo corregí
 
@@ -37,3 +38,4 @@ Los que más cambiaron el resultado:
 3. Pedir estilo inspirado en Matrix, con imágenes embebidas o de la web.
 4. Pedir un frente Bad UI Battle: solo scroll horizontal, invertido.
 5. Sacar el still embebido; hacer aleatoria la distancia de scroll y la velocidad de la lluvia.
+6. Esconder la barra y dejar solo la explicación en el portal, para forzar la rueda.
