@@ -119,4 +119,31 @@ wait, make the nav menu non clickable. Force the user to use the mouse scroll to
 
 ---
 
+## 9 — Sacar El constructo
+
+```
+commit and push the changes
+remove the "el contrcuto" button, I dont like the light mode
+```
+
+**Por qué:** el modo claro no encajaba con la estética Matrix.
+
+**Qué devolvió:** commit y push del menú muerto (`f178a69`); se eliminó el botón, las variables del tema claro y el `localStorage` del toggle. Queda solo Matrix, con la lluvia siempre encendida (salvo `prefers-reduced-motion`).
+
+**Qué hice con eso:** lo acepté. “Everything looks good”; se commitea y se pushea.
+
+---
+
+## 10 — Commit y push sin modo claro
+
+```
+everythng looks good, commit and push the changes
+```
+
+**Qué devolvió:** commit y push de la página solo Matrix, sin botón ni tema “El constructo”.
+
+**Qué hice con eso:** pendiente.
+
+---
+
 ## Conversación completa

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="matrix">
+<html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,21 +31,6 @@
       --scan: repeating-linear-gradient(to bottom, transparent 0 2px, #00000033 2px 4px);
     }
 
-    html[data-theme="construct"] {
-      --color-bg: #d8d2c4;
-      --color-surface: #ece6d8;
-      --color-text: #241f16;
-      --color-muted: #5e5648;
-      --color-accent: #6a5420;
-      --color-bright: #1a160f;
-      --color-accent-soft: #c9b98a55;
-      --color-border: #8a7d62;
-      --color-header: #d8d2c4ee;
-      --color-danger: #8a1f1f;
-      --shadow: none;
-      --scan: none;
-    }
-
     * { box-sizing: border-box; }
     html, body {
       height: 100%;
@@ -71,8 +56,6 @@
       height: 100%;
       pointer-events: none;
     }
-
-    html[data-theme="construct"] #lluvia { opacity: 0; }
 
     body::after {
       content: "";
@@ -322,11 +305,6 @@
       font-family: inherit;
     }
 
-    html[data-theme="construct"] #filtro-semana {
-      background: var(--color-surface);
-      color: var(--color-text);
-    }
-
     .week-nav { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 
     .weeks { display: grid; gap: var(--space-md); }
@@ -506,7 +484,6 @@
         <span data-seccion="calendario">Semanas</span>
         <span data-seccion="evaluacion">Evaluación</span>
         <span data-seccion="bibliografia">Bibliografía</span>
-        <button class="icon-button" type="button" id="toggle-tema" aria-pressed="false">El constructo</button>
       </nav>
     </div>
   </header>
@@ -779,8 +756,6 @@
 
   <script>
     (function () {
-      var root = document.documentElement;
-      var temaBtn = document.getElementById("toggle-tema");
       var filtro = document.getElementById("filtro-semana");
       var weeks = Array.prototype.slice.call(document.querySelectorAll(".week"));
       var weekBtns = Array.prototype.slice.call(document.querySelectorAll("[data-semana]"));
@@ -798,23 +773,6 @@
       var gust = 1;
       var glyphs = "アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      function aplicarTema(constructo) {
-        root.setAttribute("data-theme", constructo ? "construct" : "matrix");
-        temaBtn.setAttribute("aria-pressed", constructo ? "true" : "false");
-        temaBtn.textContent = constructo ? "La Matrix" : "El constructo";
-        try { localStorage.setItem("tema-zion", constructo ? "construct" : "matrix"); } catch (e) {}
-        if (constructo || reduce) detenerLluvia();
-        else iniciarLluvia();
-      }
-
-      var guardado = null;
-      try { guardado = localStorage.getItem("tema-zion"); } catch (e) {}
-      aplicarTema(guardado === "construct");
-
-      temaBtn.addEventListener("click", function () {
-        aplicarTema(root.getAttribute("data-theme") !== "construct");
-      });
 
       function coincidir(week, texto) {
         if (!texto) return true;
@@ -966,8 +924,10 @@
       }
 
       window.addEventListener("resize", function () {
-        if (root.getAttribute("data-theme") === "matrix" && !reduce) dimensionar();
+        if (!reduce) dimensionar();
       });
+
+      iniciarLluvia();
     })();
   </script>
 </body>
