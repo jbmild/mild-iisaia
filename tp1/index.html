@@ -88,19 +88,6 @@
       outline-offset: 3px;
     }
 
-    .skip-link {
-      position: absolute;
-      left: var(--space-sm);
-      top: -3rem;
-      z-index: 50;
-      padding: var(--space-xs) var(--space-sm);
-      background: var(--color-accent);
-      color: var(--color-bg);
-      text-decoration: none;
-    }
-
-    .skip-link:focus { top: var(--space-sm); }
-
     .wrap {
       width: min(68rem, calc(100% - var(--space-lg)));
       margin-inline: auto;
@@ -135,11 +122,7 @@
       margin: 0;
       font-size: 0.95rem;
       letter-spacing: 0.06em;
-    }
-
-    .brand a {
       color: var(--color-accent);
-      text-decoration: none;
       text-shadow: 0 0 10px var(--color-accent);
     }
 
@@ -150,15 +133,15 @@
       gap: 0.4rem 1rem;
     }
 
-    body > header nav a {
+    body > header nav span {
       font-size: 0.85rem;
       color: var(--color-muted);
-      text-decoration: none;
       text-transform: uppercase;
+      cursor: default;
+      user-select: none;
     }
 
-    body > header nav a:hover,
-    body > header nav a[aria-current="true"] {
+    body > header nav span[aria-current="true"] {
       color: var(--color-accent);
       text-shadow: 0 0 8px var(--color-accent);
     }
@@ -510,20 +493,19 @@
 </head>
 <body>
   <canvas id="lluvia" aria-hidden="true"></canvas>
-  <a class="skip-link" href="#portal">Saltar al contenido</a>
 
   <header>
     <div class="wrap masthead">
-      <p class="brand"><a href="#portal">root@zion:~# iisaia</a></p>
-      <nav aria-label="Secciones">
-        <a href="#portal">Portal</a>
-        <a href="#inicio">Inicio</a>
-        <a href="#promesa">Promesa</a>
-        <a href="#objetivos">Objetivos</a>
-        <a href="#unidades">Unidades</a>
-        <a href="#calendario">Semanas</a>
-        <a href="#evaluacion">Evaluación</a>
-        <a href="#bibliografia">Bibliografía</a>
+      <p class="brand">root@zion:~# iisaia</p>
+      <nav aria-label="Mapa de secciones (no se puede clickear)">
+        <span data-seccion="portal">Portal</span>
+        <span data-seccion="inicio">Inicio</span>
+        <span data-seccion="promesa">Promesa</span>
+        <span data-seccion="objetivos">Objetivos</span>
+        <span data-seccion="unidades">Unidades</span>
+        <span data-seccion="calendario">Semanas</span>
+        <span data-seccion="evaluacion">Evaluación</span>
+        <span data-seccion="bibliografia">Bibliografía</span>
         <button class="icon-button" type="button" id="toggle-tema" aria-pressed="false">El constructo</button>
       </nav>
     </div>
@@ -535,7 +517,8 @@
       <h1 id="titulo-batalla">Wake up, supervisor</h1>
       <p class="aviso">
         Esta página <strong>solo se desplaza en horizontal</strong> y no hay barra de scroll.
-        Usá la rueda del mouse (o el gesto del trackpad). El eje está al revés:
+        Usá la rueda del mouse (o el gesto del trackpad). El menú de arriba se ve, pero no se clickea.
+        El eje está al revés:
         si intentás ir a la izquierda, la pantalla se mueve a la derecha, y al revés.
         Cada gesto recorre una distancia distinta: a veces casi nada, a veces un salto.
       </p>
@@ -802,9 +785,9 @@
       var weeks = Array.prototype.slice.call(document.querySelectorAll(".week"));
       var weekBtns = Array.prototype.slice.call(document.querySelectorAll("[data-semana]"));
       var empty = document.getElementById("sin-resultados");
-      var navLinks = Array.prototype.slice.call(document.querySelectorAll("body > header nav a"));
+      var navLinks = Array.prototype.slice.call(document.querySelectorAll("body > header nav [data-seccion]"));
       var sections = navLinks
-        .map(function (a) { return document.querySelector(a.getAttribute("href")); })
+        .map(function (el) { return document.getElementById(el.getAttribute("data-seccion")); })
         .filter(Boolean);
       var activeWeek = "todas";
       var canvas = document.getElementById("lluvia");
@@ -915,27 +898,16 @@
         }
       });
 
-      document.querySelectorAll("body > header nav a, .skip-link, .brand a").forEach(function (a) {
-        a.addEventListener("click", function (e) {
-          var id = a.getAttribute("href");
-          if (!id || id.charAt(0) !== "#") return;
-          var dest = document.querySelector(id);
-          if (!dest) return;
-          e.preventDefault();
-          pista.scrollLeft = dest.offsetLeft;
-        });
-      });
-
       function marcarNav() {
         var fromLeft = pista.scrollLeft + 24;
         var current = sections[0];
         sections.forEach(function (sec) {
           if (sec.offsetLeft <= fromLeft) current = sec;
         });
-        navLinks.forEach(function (a) {
-          var on = current && a.getAttribute("href") === "#" + current.id;
-          if (on) a.setAttribute("aria-current", "true");
-          else a.removeAttribute("aria-current");
+        navLinks.forEach(function (el) {
+          var on = current && el.getAttribute("data-seccion") === current.id;
+          if (on) el.setAttribute("aria-current", "true");
+          else el.removeAttribute("aria-current");
         });
       }
 

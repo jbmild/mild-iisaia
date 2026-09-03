@@ -19,13 +19,14 @@ Una página de saludo mínima, después una guía completa de la materia, un res
 - SVG propio de las dos cápsulas. Alternativa visual: “El constructo” (claro, sin lluvia). Sin still embebido: el data URI hacía ilegible el archivo.
 - Calendario filtrable (botones + búsqueda) en lugar de una tabla estática, para usar estado, DOM y eventos.
 - Eje único horizontal: cada sección es un panel; unidades, semanas y listas largas se leen de costado para no volver al scroll vertical.
-- Inversión deliberada: rueda, trackpad, flechas y gesto táctil mueven la pista al revés. El menú fijo no miente, para que el docente pueda saltar secciones.
+- Inversión deliberada: rueda y trackpad mueven la pista al revés.
 - Distancia de scroll no lineal: cada gesto toma un factor nuevo (casi nada, un paso, un salto). La lluvia cambia de velocidad por columna y a ráfagas, para desorientar.
-- Barra de scroll oculta. El portal solo explica el truco: hay que usar la rueda, que dispara el factor aleatorio. El menú de arriba sigue pudiendo saltar secciones.
+- Barra de scroll oculta. El portal solo explica el truco: hay que usar la rueda, que dispara el factor aleatorio.
+- El menú de arriba es un mapa muerto: se ve y marca la sección, pero no se clickea. La única forma de recorrer es la rueda.
 
 ## Qué salió mal y cómo lo corregí
 
-El primer corte era solo un Hola mundo. Se aceptó y se pidió la página completa. El segundo corte se aceptó y se pidió un cambio de estilo (Matrix), sin tirar contenido ni estructura semántica. El tercero se aceptó y se pidió un frente Bad UI con scroll horizontal invertido. El still JPEG embebido dejó el HTML ilegible: se sacó y quedó solo el canvas.
+El primer corte era solo un Hola mundo. Se aceptó y se pidió la página completa. El segundo corte se aceptó y se pidió un cambio de estilo (Matrix), sin tirar contenido ni estructura semántica. El tercero se aceptó y se pidió un frente Bad UI con scroll horizontal invertido. El still JPEG embebido dejó el HTML ilegible: se sacó y quedó solo el canvas. El menú de arriba todavía saltaba secciones: se lo dejó a la vista, pero sin enlaces.
 
 ## Prompts
 
@@ -39,3 +40,4 @@ Los que más cambiaron el resultado:
 4. Pedir un frente Bad UI Battle: solo scroll horizontal, invertido.
 5. Sacar el still embebido; hacer aleatoria la distancia de scroll y la velocidad de la lluvia.
 6. Esconder la barra y dejar solo la explicación en el portal, para forzar la rueda.
+7. Apagar el menú: que se vea, que no navegue.

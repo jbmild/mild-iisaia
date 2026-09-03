@@ -101,7 +101,21 @@ looks perfecto commit and push the changes.
 
 **Qué devolvió:** commit y push de la barra oculta y el portal reducido a título + explicación (`tp1/index.html`, README y este log).
 
-**Qué hice con eso:** pendiente.
+**Qué hice con eso:** lo acepté. Se commiteó y se pusheó (`74930bf`); después se pide que el menú no sea clickeable.
+
+---
+
+## 8 — Menú no clickeable
+
+```
+wait, make the nav menu non clickable. Force the user to use the mouse scroll to navigate
+```
+
+**Por qué:** el menú de arriba saltaba a la sección real y se podía evitar la rueda.
+
+**Qué devolvió:** los ítems del `nav` pasaron a ser etiquetas (`span`) sin enlace; se sacó el skip-link y el link del brand. El mapa sigue marcando la sección actual, pero no navega.
+
+**Qué hice con eso:** lo acepté. Se commitea y se pushea; después se pide sacar el botón del constructo.
 
 ---
 
