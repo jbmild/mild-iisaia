@@ -8,19 +8,20 @@ Abrir `index.html` con doble click, o arrastrarlo a un navegador. No hace falta 
 
 ## Qué me propuse construir
 
-Una página de saludo mínima (HTML + CSS, etiquetas semánticas) como primer corte. Después, una página completa sobre la materia: qué es el curso, objetivos, unidades, calendario de ocho semanas, evaluación y bibliografía. Un solo archivo, con JavaScript para tema, filtro de semanas y marca de sección activa.
+Una página de saludo mínima, después una guía completa de la materia, y después un restyling al estilo Matrix (fósforo verde, lluvia digital, constructo como tema alternativo) sin perder HTML semántico ni el archivo único.
 
 ## Decisiones que tomé yo
 
-- Un solo `index.html` (paradigma *single-file* de la semana 2): CSS en `<style>`, JS en `<script>`. Sin CDN ni dependencias.
+- Un solo `index.html` (paradigma *single-file* de la semana 2): CSS en `<style>`, JS en `<script>`. Las fuentes se piden a Google Fonts; la lluvia estática va embebida para que el archivo siga abriéndose offline (con fallback mono).
 - Contenido en el HTML, no en un objeto JavaScript: la página se lee sin JS; el script solo realza (tema, filtro, navegación).
 - Landmarks semánticos: `header`, `nav`, `main`, `section`, `article`, `aside`, `footer`, `details`/`summary`. Los `div` que quedan son cajas de layout, no encabezados disfrazados.
-- Paleta y tipografía del Hola mundo, más tema claro/oscuro con variables CSS y `localStorage`.
+- Paleta Matrix (verde fósforo sobre negro), tipografías `VT323` y `Share Tech Mono` desde Google Fonts, lluvia digital en canvas, scanlines CRT.
+- Imagen de lluvia embebida como data URI (original, no es un fotograma). SVG propio de las dos cápsulas. Alternativa visual: “El constructo” (claro, sin lluvia).
 - Calendario filtrable (botones + búsqueda) en lugar de una tabla estática, para usar estado, DOM y eventos.
 
 ## Qué salió mal y cómo lo corregí
 
-El primer corte era solo un Hola mundo. Se aceptó como primera vista y se pidió la página completa; no se tiró el enfoque semántico ni el archivo único, se amplió encima.
+El primer corte era solo un Hola mundo. Se aceptó y se pidió la página completa. El segundo corte se aceptó y se pidió un cambio de estilo (Matrix), sin tirar contenido ni estructura semántica.
 
 ## Prompts
 
@@ -30,3 +31,4 @@ Los que más cambiaron el resultado:
 
 1. Pedir HTML semántico y CSS plano para un Hola mundo.
 2. Pedir la página completa de la materia, autocontenida, con JS, usando `Material/`.
+3. Pedir estilo inspirado en Matrix, con imágenes embebidas o de la web.

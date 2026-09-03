@@ -31,4 +31,19 @@ After commiting, create a full web page with the content for this subject. It ne
 
 ---
 
+## 3 — Estilo Matrix
+
+```
+good second step. commit those changes.
+Now moving forward I want you to change the syle. Want a style based of the movies matrix, use colors, fonts and visuals similar to the movie. Make sure to keep using descriptive html + css + javascript all in a self contained file. You can consume web images as well as images that you can embed into the file
+```
+
+**Por qué:** el contenido estaba; faltaba una identidad visual.
+
+**Qué devolvió:** commit de la guía (`0158038`) y restyling de `index.html`: paleta verde/negro, fuentes mono, lluvia en canvas, still embebido, SVG de cápsulas, toggle Matrix / Constructo.
+
+**Qué hice con eso:** lo acepté. “Looks amazing”; se commitea, se pushea y se pide un frente Bad UI Battle.
+
+---
+
 ## Conversación completa
