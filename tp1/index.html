@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hola mundo — TP 1</title>
+  <title>Introducción a la ingeniería de software asistida por IA</title>
   <style>
     :root {
       --color-bg: #f4f1ea;
@@ -11,17 +11,35 @@
       --color-text: #1c1917;
       --color-muted: #57534e;
       --color-accent: #0f766e;
+      --color-accent-soft: #ccfbf1;
       --color-border: #d6d3d1;
+      --color-header: #fffdf8cc;
+      --space-xs: 0.4rem;
       --space-sm: 0.75rem;
       --space-md: 1.5rem;
       --space-lg: 3rem;
+      --space-xl: 4.5rem;
       --font-body: Georgia, "Times New Roman", serif;
       --font-ui: system-ui, "Segoe UI", sans-serif;
+      --radius: 8px;
+      --shadow: 0 8px 24px #1c191714;
     }
 
-    * {
-      box-sizing: border-box;
+    html[data-theme="dark"] {
+      --color-bg: #1c1917;
+      --color-surface: #292524;
+      --color-text: #f5f5f4;
+      --color-muted: #a8a29e;
+      --color-accent: #2dd4bf;
+      --color-accent-soft: #134e4a;
+      --color-border: #44403c;
+      --color-header: #1c1917cc;
+      --shadow: 0 8px 24px #00000066;
     }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
@@ -30,23 +48,103 @@
       flex-direction: column;
       font-family: var(--font-body);
       font-size: 1.125rem;
-      line-height: 1.6;
+      line-height: 1.65;
       color: var(--color-text);
       background: var(--color-bg);
     }
 
-    header,
-    main,
-    footer {
-      width: min(40rem, calc(100% - var(--space-lg)));
+    :focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: var(--space-sm);
+      top: -3rem;
+      z-index: 20;
+      padding: var(--space-xs) var(--space-sm);
+      background: var(--color-accent);
+      color: var(--color-bg);
+      font-family: var(--font-ui);
+      text-decoration: none;
+    }
+
+    .skip-link:focus { top: var(--space-sm); }
+
+    .wrap {
+      width: min(68rem, calc(100% - var(--space-lg)));
       margin-inline: auto;
     }
 
-    header {
-      padding-block: var(--space-lg) var(--space-md);
+    body > header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--color-header);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--color-border);
     }
 
-    header p {
+    .masthead {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding-block: var(--space-sm);
+    }
+
+    .brand {
+      margin: 0;
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .brand a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    body > header nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.4rem 1rem;
+    }
+
+    body > header nav a {
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      text-decoration: none;
+    }
+
+    body > header nav a:hover,
+    body > header nav a[aria-current="true"] {
+      color: var(--color-accent);
+    }
+
+    .icon-button {
+      font-family: var(--font-ui);
+      font-size: 0.8rem;
+      padding: 0.35rem 0.7rem;
+      border: 1px solid var(--color-border);
+      border-radius: 999px;
+      background: var(--color-surface);
+      color: var(--color-text);
+      cursor: pointer;
+    }
+
+    main { flex: 1; }
+
+    .hero {
+      padding-block: var(--space-xl) var(--space-lg);
+    }
+
+    .kicker {
       margin: 0 0 var(--space-sm);
       font-family: var(--font-ui);
       font-size: 0.8rem;
@@ -56,57 +154,530 @@
     }
 
     h1 {
-      margin: 0;
-      font-size: clamp(2.5rem, 6vw, 3.75rem);
-      line-height: 1.1;
-      font-weight: 700;
+      margin: 0 0 var(--space-md);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      line-height: 1.15;
     }
 
-    main {
-      flex: 1;
-    }
-
-    section {
-      padding: var(--space-md);
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: 8px;
-    }
-
-    section p {
-      margin: 0;
+    .lede {
+      max-width: 42rem;
+      font-size: 1.2rem;
       color: var(--color-muted);
     }
 
-    footer {
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm) var(--space-md);
+      margin: var(--space-md) 0 0;
+      padding: 0;
+      list-style: none;
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      color: var(--color-muted);
+    }
+
+    .meta li strong { color: var(--color-text); font-weight: 600; }
+
+    h2 {
+      margin: 0 0 var(--space-md);
+      font-size: clamp(1.6rem, 3vw, 2rem);
+    }
+
+    h3 {
+      margin: 0 0 var(--space-sm);
+      font-size: 1.2rem;
+    }
+
+    section.block {
+      padding-block: var(--space-lg);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .split {
+      display: grid;
+      gap: var(--space-md);
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 800px) {
+      .split { grid-template-columns: 1.2fr 0.8fr; }
+    }
+
+    .card,
+    aside.note {
+      padding: var(--space-md);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    aside.note {
+      border-left: 4px solid var(--color-accent);
+      box-shadow: none;
+    }
+
+    aside.note p { margin: 0; }
+
+    .card-grid {
+      display: grid;
+      gap: var(--space-md);
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    }
+
+    .card header p,
+    .eyebrow {
+      margin: 0 0 var(--space-xs);
+      font-family: var(--font-ui);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+    }
+
+    .card p:last-child { margin-bottom: 0; }
+
+    .unit-list,
+    .biblio {
+      display: grid;
+      gap: var(--space-md);
+    }
+
+    details.unit {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: var(--space-sm) var(--space-md);
+    }
+
+    details.unit summary {
+      cursor: pointer;
+      font-weight: 700;
+      font-family: var(--font-ui);
+    }
+
+    details.unit[open] summary { color: var(--color-accent); }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: center;
+      margin-bottom: var(--space-md);
+    }
+
+    label.sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+
+    #filtro-semana {
+      flex: 1;
+      min-width: 12rem;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-ui);
+    }
+
+    .week-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .week-nav button[aria-pressed="true"] {
+      background: var(--color-accent);
+      color: var(--color-bg);
+      border-color: var(--color-accent);
+    }
+
+    .weeks { display: grid; gap: var(--space-md); }
+
+    .week[hidden] { display: none; }
+
+    .week header {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-sm);
+      align-items: baseline;
+      margin-bottom: var(--space-sm);
+    }
+
+    .week header p { margin: 0; color: var(--color-accent); font-family: var(--font-ui); font-size: 0.8rem; }
+
+    .eval-grid {
+      display: grid;
+      gap: var(--space-md);
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }
+
+    .eval-grid article { padding: var(--space-md); background: var(--color-accent-soft); border-radius: var(--radius); }
+    .eval-grid h3 { font-family: var(--font-ui); }
+
+    .biblio li { margin-bottom: var(--space-sm); }
+    .biblio a { color: var(--color-accent); }
+
+    body > footer {
+      border-top: 1px solid var(--color-border);
       padding-block: var(--space-md) var(--space-lg);
       font-family: var(--font-ui);
       font-size: 0.875rem;
       color: var(--color-muted);
     }
 
-    footer p {
-      margin: 0;
+    body > footer p { margin: 0; }
+
+    .empty-filter {
+      display: none;
+      color: var(--color-muted);
+      font-family: var(--font-ui);
     }
+
+    .empty-filter.is-visible { display: block; }
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
   <header>
-    <p>Introducción a la ingeniería de software asistida por IA</p>
-    <h1>Hola mundo</h1>
+    <div class="wrap masthead">
+      <p class="brand"><a href="#inicio">IISAIA · 2026</a></p>
+      <nav aria-label="Secciones">
+        <a href="#promesa">Promesa</a>
+        <a href="#objetivos">Objetivos</a>
+        <a href="#unidades">Unidades</a>
+        <a href="#calendario">Semanas</a>
+        <a href="#evaluacion">Evaluación</a>
+        <a href="#bibliografia">Bibliografía</a>
+        <button class="icon-button" type="button" id="toggle-tema" aria-pressed="false">Tema oscuro</button>
+      </nav>
+    </div>
   </header>
 
-  <main>
-    <section>
-      <p>
-        Esta es una página de saludo hecha solo con HTML y CSS,
-        usando etiquetas que describen cada parte del documento.
+  <main id="contenido">
+    <section class="hero wrap" id="inicio" aria-labelledby="titulo-curso">
+      <p class="kicker">Diplomatura en desarrollo de aplicaciones utilizando inteligencia artificial</p>
+      <h1 id="titulo-curso">Introducción a la ingeniería de software asistida por IA</h1>
+      <p class="lede">
+        En ocho semanas terminás con una aplicación funcionando —interfaz, servidor y datos—
+        y vas a tener que explicar cómo la dirigiste. No vas a escribir la mayor parte del código.
+        El trabajo se corrió de lugar: la IA implementa; vos decidís y verificás.
       </p>
+      <ul class="meta">
+        <li><strong>Docente:</strong> Enzo Pacilio</li>
+        <li><strong>Año:</strong> 2026</li>
+        <li><strong>Modalidad:</strong> 8 clases de 3 horas</li>
+      </ul>
+    </section>
+
+    <section class="block wrap" id="promesa" aria-labelledby="titulo-promesa">
+      <h2 id="titulo-promesa">Qué es este curso</h2>
+      <div class="split">
+        <div>
+          <p>
+            No es un curso de programación ni un taller de trucos de prompt.
+            Es un curso sobre <strong>dirigir</strong>: nombrar las piezas del software,
+            especificar antes de que se escriba una línea, y auditar lo que vuelve.
+            El rol tiene nombre: <strong>supervisor</strong>.
+          </p>
+          <p>
+            El recorrido tiene tres movimientos. Primero, entender la herramienta
+            (cómo predice un token, por qué alucina, qué es la ventana de contexto).
+            Segundo, aprender a nombrar frontend y backend. Tercero, dirigir a un
+            agente que ya no solo escribe: actúa sobre tu proyecto.
+          </p>
+        </div>
+        <aside class="note">
+          <p>
+            Al final vas a poder abrir un proyecto que no escribiste, entender su
+            estructura, pedirle un cambio concreto a un agente y darte cuenta de
+            si lo que volvió sirve. Las herramientas cambian; el criterio, no.
+          </p>
+        </aside>
+      </div>
+
+      <h3 class="eyebrow" style="margin-top: 2rem;">Tres movimientos</h3>
+      <div class="card-grid">
+        <article class="card">
+          <header>
+            <p>1 · Entender</p>
+            <h3>La herramienta</h3>
+          </header>
+          <p>Tokens, predicción estocástica, pre-training, post-training, alucinaciones y límites de cómputo por token.</p>
+        </article>
+        <article class="card">
+          <header>
+            <p>2 · Nombrar</p>
+            <h3>Frontend y backend</h3>
+          </header>
+          <p>HTML semántico, CSS, estado y eventos. HTTP, REST, datos, errores y contratos OpenAPI.</p>
+        </article>
+        <article class="card">
+          <header>
+            <p>3 · Dirigir</p>
+            <h3>El agente</h3>
+          </header>
+          <p>Loop pensar → actuar → observar, runtime, plugins, spec-driven development y MCP.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="block wrap" id="objetivos" aria-labelledby="titulo-objetivos">
+      <h2 id="titulo-objetivos">Objetivos</h2>
+      <ul>
+        <li>Desarrollar intuición sobre modelos de lenguaje: tokenización, predicción estocástica, pre-training y post-training, RLHF, alucinaciones y límites del razonamiento.</li>
+        <li>Conocer el mapa del software (frontend, backend, APIs y datos) para especificar, dirigir y auditar lo que genera la IA. Contratos OpenAPI. Git y GitHub Flow.</li>
+        <li>Operar entornos agénticos: el loop del agente, la ventana de contexto como recurso finito, memoria, reglas, permisos, skills, sub-agentes y modo plan.</li>
+        <li>Extender el entorno: plugins, spec-driven development y Model Context Protocol.</li>
+        <li>Aplicar pensamiento computacional: descomponer problemas en especificaciones y planes verificables, sosteniendo el rol de supervisor arquitectónico.</li>
+      </ul>
+    </section>
+
+    <section class="block wrap" id="unidades" aria-labelledby="titulo-unidades">
+      <h2 id="titulo-unidades">Unidades</h2>
+      <p>Seis unidades temáticas. No coinciden una a una con las ocho clases: la unidad 4 ocupa dos encuentros y la última clase es el Demo Day.</p>
+      <div class="unit-list">
+        <details class="unit" open>
+          <summary>Unidad 1 — Funcionamiento de LLMs</summary>
+          <p>El átomo del lenguaje (tokens y BPE). Predicción del siguiente token. Pre-training: curación de datos, filtrado, cómputo. Modelos base: autocompletado, in-context learning y cutoff date. Post-training: SFT. Alineación con RLHF. Alucinaciones y mitigación por herramientas. Límites cognitivos y modelos de razonamiento.</p>
+        </details>
+        <details class="unit">
+          <summary>Unidad 2 — Arquitectura frontend y dirección de la IA</summary>
+          <p>El trío web: HTML semántico, CSS (caja, layout, tipografía, color, variables) e interactividad (estado, DOM, eventos). Paradigma <em>single-file platform</em>. Cuatro patrones de prompt para UI. Ciclo Architect → Prompter → Reviewer → Tester.</p>
+        </details>
+        <details class="unit">
+          <summary>Unidad 3 — Arquitectura backend, datos y contratos</summary>
+          <p>Cliente-servidor y HTTP. REST: recurso, jerarquía, idempotencia. El endpoint como contrato. SQL frente a documentos. Lectura de fallas: 4xx, 5xx, logs y stack traces. OpenAPI y Swagger UI.</p>
+        </details>
+        <details class="unit">
+          <summary>Unidad 4 — Fundamentos de desarrollo agéntico y runtime</summary>
+          <p>De una IA que escribe a una que actúa. Loop pensar → actuar → observar. Tools. Ventana de contexto. Modos de falla y rol del supervisor. Memoria persistente, reglas, settings, permisos, skills, sub-agentes y modo plan.</p>
+        </details>
+        <details class="unit">
+          <summary>Unidad 5 — Plugins y spec-driven development</summary>
+          <p>De piezas sueltas a paquetes distribuibles. Flujo: diseño por preguntas, plan ejecutable, desarrollo delegado, TDD, revisión, verificación con evidencia y cierre de rama. Git y GitHub Flow. Calidad y testing se trabajan de forma transversal acá.</p>
+        </details>
+        <details class="unit">
+          <summary>Unidad 6 — Model Context Protocol (MCP)</summary>
+          <p>Por qué un protocolo y no una API (de N×M a N+M). Host, cliente y servidor. Tres primitives. Discovery dinámico. Transportes Stdio y Streamable HTTP. Cuándo conviene MCP, cuándo no, y qué riesgos se asumen.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="block wrap" id="calendario" aria-labelledby="titulo-calendario">
+      <h2 id="titulo-calendario">Las ocho semanas</h2>
+      <p>Elegí una semana o buscá por tema. El contenido sale del programa y de los hilos de cada carpeta en <code>Material/semanas</code>.</p>
+
+      <div class="toolbar">
+        <label class="sr-only" for="filtro-semana">Filtrar semanas</label>
+        <input id="filtro-semana" type="search" placeholder="Filtrar: tokens, OpenAPI, MCP…" autocomplete="off">
+        <nav class="week-nav" aria-label="Elegir semana">
+          <button class="icon-button" type="button" data-semana="todas" aria-pressed="true">Todas</button>
+          <button class="icon-button" type="button" data-semana="1" aria-pressed="false">1</button>
+          <button class="icon-button" type="button" data-semana="2" aria-pressed="false">2</button>
+          <button class="icon-button" type="button" data-semana="3" aria-pressed="false">3</button>
+          <button class="icon-button" type="button" data-semana="4" aria-pressed="false">4</button>
+          <button class="icon-button" type="button" data-semana="5" aria-pressed="false">5</button>
+          <button class="icon-button" type="button" data-semana="6" aria-pressed="false">6</button>
+          <button class="icon-button" type="button" data-semana="7" aria-pressed="false">7</button>
+          <button class="icon-button" type="button" data-semana="8" aria-pressed="false">8</button>
+        </nav>
+      </div>
+
+      <p class="empty-filter" id="sin-resultados" hidden>Ninguna semana coincide con ese filtro.</p>
+
+      <div class="weeks">
+        <article class="week card" data-week="1" data-tags="llm tokens pre-training sft alucinaciones karpathy">
+          <header>
+            <h3>Semana 1 — Funcionamiento de LLMs</h3>
+            <p>Material 00 + 01</p>
+          </header>
+          <p>Apertura del curso y sondeo. Después, el pipeline completo: internet → filtrado → tokens → entrenamiento → modelo base → SFT → alucinaciones y herramientas → RL y modelos de razonamiento. Fuente: Karpathy, <cite>Deep Dive into LLMs like ChatGPT</cite>.</p>
+        </article>
+        <article class="week card" data-week="2" data-tags="frontend html css semántico single-file prompt ui">
+          <header>
+            <h3>Semana 2 — Arquitectura frontend</h3>
+            <p>Material 02</p>
+          </header>
+          <p>Vocabulario para dirigir interfaz: HTML como sustantivos, CSS (caja, flex/grid, tipografía, variables), estado-DOM-eventos, un solo archivo, y cuatro patrones de prompt. Cierre: actividad grupal Architect → Prompter → Reviewer → Tester.</p>
+        </article>
+        <article class="week card" data-week="3" data-tags="backend http rest openapi sql nosql contratos">
+          <header>
+            <h3>Semana 3 — Backend, datos y contratos</h3>
+            <p>Material 03</p>
+          </header>
+          <p>Cliente-servidor, methods y status codes, REST, el endpoint como contrato, relaciones frente a documentos, lectura de fallas, y OpenAPI dictado en vivo con render en Swagger UI.</p>
+        </article>
+        <article class="week card" data-week="4" data-tags="agente loop tools contexto supervisor">
+          <header>
+            <h3>Semana 4 — De escribir a actuar</h3>
+            <p>Material 04 · parte 1</p>
+          </header>
+          <p>El agente entra en un loop: pensar → actuar → observar. Tools como manos, ventana de contexto finita, modos de falla y el rol del supervisor. Presentación del entorno agéntico en terminal.</p>
+        </article>
+        <article class="week card" data-week="5" data-tags="runtime claude.md rules permisos skills sub-agentes plan">
+          <header>
+            <h3>Semana 5 — Configuración del runtime</h3>
+            <p>Material 04 · parte 2</p>
+          </header>
+          <p>Memoria persistente, reglas por alcance, settings, permisos allow/deny/ask, skills, sub-agentes y modo plan. Cada estudiante expone la idea del trabajo práctico final y recibe devolución de alcance.</p>
+        </article>
+        <article class="week card" data-week="6" data-tags="plugins superpowers spec-driven git github flow tdd">
+          <header>
+            <h3>Semana 6 — Plugins y spec-driven development</h3>
+            <p>Material 05</p>
+          </header>
+          <p>Las piezas del runtime se empaquetan en un plugin. Instalación de Superpowers y el flujo: brainstorming, plan, desarrollo con sub-agentes, TDD, review, verificación con evidencia, merge. Git y GitHub Flow.</p>
+        </article>
+        <article class="week card" data-week="7" data-tags="mcp protocolo host primitives stdio http">
+          <header>
+            <h3>Semana 7 — Model Context Protocol</h3>
+            <p>Material 06</p>
+          </header>
+          <p>Más allá del set de tools del host. Protocolo, no API. Arquitectura host/cliente/servidor, tres primitives, discovery dinámico. Demos de transporte local (Stdio) y remoto (Streamable HTTP). Cuándo MCP y qué riesgos.</p>
+        </article>
+        <article class="week card" data-week="8" data-tags="demo day mvp apropiación defensa proceso">
+          <header>
+            <h3>Semana 8 — Demo Day</h3>
+            <p>Material 08</p>
+          </header>
+          <p>Exposición del MVP. Defensa del proceso: cómo se especificó, cómo se gestionó el contexto, cómo se detectó y corrigió la deriva del agente. Apropiación tecnológica: explicar, corregir y extender el código generado.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="block wrap" id="evaluacion" aria-labelledby="titulo-evaluacion">
+      <h2 id="titulo-evaluacion">Cómo se aprueba</h2>
+      <p>
+        Tres trabajos prácticos <strong>individuales</strong>, en un único repositorio público de GitHub,
+        con una carpeta por entrega. Que funcione no alcanza: se evalúa si podés contar el proceso.
+        Eso se llama <strong>apropiación</strong>.
+      </p>
+      <div class="eval-grid">
+        <article>
+          <h3>TP 1</h3>
+          <p>Entrega acotada para practicar lo visto en clase (esta página vive acá).</p>
+        </article>
+        <article>
+          <h3>TP 2</h3>
+          <p>Segunda práctica acotada. Misma forma: carpeta, README-informe, proceso visible.</p>
+        </article>
+        <article>
+          <h3>TP final</h3>
+          <p>Aplicación completa —interfaz, servidor y datos— defendida en el Demo Day.</p>
+        </article>
+      </div>
+      <aside class="note" style="margin-top: 1.5rem;">
+        <p>
+          El README de cada carpeta es el informe: especificación inicial, prompts,
+          manejo de contexto, desvíos y cómo se ejecuta. Desde la clase 6, también
+          spec y plan en disco, commits, ramas y pull requests.
+          El historial no se fabrica la noche anterior.
+        </p>
+      </aside>
+    </section>
+
+    <section class="block wrap" id="bibliografia" aria-labelledby="titulo-biblio">
+      <h2 id="titulo-biblio">Bibliografía básica</h2>
+      <ol class="biblio">
+        <li>Karpathy, A. <cite>Deep Dive into LLMs like ChatGPT</cite>. <a href="https://www.youtube.com/watch?v=7xTGNNLPyMI">YouTube</a> — Unidad 1.</li>
+        <li>Anthropic. <cite>Claude Code — documentación oficial</cite>. <a href="https://code.claude.com/docs">code.claude.com/docs</a> — Unidades 4 y 5.</li>
+        <li><cite>Superpowers</cite>. <a href="https://github.com/obra/superpowers">github.com/obra/superpowers</a> — Unidad 5.</li>
+        <li><cite>Model Context Protocol</cite>. <a href="https://modelcontextprotocol.io">modelcontextprotocol.io</a> — Unidad 6.</li>
+        <li>OpenAPI Initiative. <cite>OpenAPI Specification</cite>. <a href="https://spec.openapis.org">spec.openapis.org</a> — Unidad 3.</li>
+      </ol>
     </section>
   </main>
 
   <footer>
-    <p>Jonatan Mild — TP 1</p>
+    <div class="wrap">
+      <p>Jonatan Mild — TP 1. Contenido adaptado del programa de la materia y de <code>Material/</code> (docente: Enzo Pacilio, 2026).</p>
+    </div>
   </footer>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var temaBtn = document.getElementById("toggle-tema");
+      var filtro = document.getElementById("filtro-semana");
+      var weeks = Array.prototype.slice.call(document.querySelectorAll(".week"));
+      var weekBtns = Array.prototype.slice.call(document.querySelectorAll("[data-semana]"));
+      var empty = document.getElementById("sin-resultados");
+      var navLinks = Array.prototype.slice.call(document.querySelectorAll("body > header nav a"));
+      var sections = navLinks
+        .map(function (a) { return document.querySelector(a.getAttribute("href")); })
+        .filter(Boolean);
+      var activeWeek = "todas";
+
+      function aplicarTema(oscuro) {
+        root.setAttribute("data-theme", oscuro ? "dark" : "light");
+        temaBtn.setAttribute("aria-pressed", oscuro ? "true" : "false");
+        temaBtn.textContent = oscuro ? "Tema claro" : "Tema oscuro";
+        try { localStorage.setItem("tema-iisaia", oscuro ? "dark" : "light"); } catch (e) {}
+      }
+
+      var guardado = null;
+      try { guardado = localStorage.getItem("tema-iisaia"); } catch (e) {}
+      aplicarTema(guardado ? guardado === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches);
+
+      temaBtn.addEventListener("click", function () {
+        aplicarTema(root.getAttribute("data-theme") !== "dark");
+      });
+
+      function coincide(week, texto) {
+        if (!texto) return true;
+        var blob = ((week.getAttribute("data-tags") || "") + " " + week.textContent).toLowerCase();
+        return blob.indexOf(texto) !== -1;
+      }
+
+      function pintarSemanas() {
+        var q = (filtro.value || "").trim().toLowerCase();
+        var visibles = 0;
+        weeks.forEach(function (week) {
+          var porNumero = activeWeek === "todas" || week.getAttribute("data-week") === activeWeek;
+          var show = porNumero && coincide(week, q);
+          week.hidden = !show;
+          if (show) visibles += 1;
+        });
+        empty.hidden = visibles !== 0;
+        empty.classList.toggle("is-visible", visibles === 0);
+      }
+
+      weekBtns.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          activeWeek = btn.getAttribute("data-semana");
+          weekBtns.forEach(function (b) {
+            b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+          });
+          pintarSemanas();
+        });
+      });
+
+      filtro.addEventListener("input", pintarSemanas);
+
+      function marcarNav() {
+        var fromTop = window.scrollY + 96;
+        var current = sections[0];
+        sections.forEach(function (sec) {
+          if (sec.offsetTop <= fromTop) current = sec;
+        });
+        navLinks.forEach(function (a) {
+          var on = current && a.getAttribute("href") === "#" + current.id;
+          if (on) a.setAttribute("aria-current", "true");
+          else a.removeAttribute("aria-current");
+        });
+      }
+
+      window.addEventListener("scroll", marcarNav, { passive: true });
+      marcarNav();
+    })();
+  </script>
 </body>
 </html>

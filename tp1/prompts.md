@@ -16,4 +16,19 @@ Create a Hola mundo page. the page needs to be a plain html+css, make sure to us
 
 ---
 
+## 2 — Página completa de la materia
+
+```
+good first view. commit those changes.
+After commiting, create a full web page with the content for this subject. It needs to be a plain html+css+javascript selfcontained page. Make sure to keep using descriptive html tags. Use the material in @Material  for the information to show.
+```
+
+**Por qué:** la primera vista servía como corte, pero faltaba el contenido de la materia y el JavaScript.
+
+**Qué devolvió:** commit del Hola mundo (`49b73b2`) y un `index.html` autocontenido con programa, unidades, calendario filtrable, evaluación, bibliografía, tema claro/oscuro y README actualizado.
+
+**Qué hice con eso:** lo acepté. Segundo paso bien; se commitea y se pide un cambio de estilo.
+
+---
+
 ## Conversación completa
