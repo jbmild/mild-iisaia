@@ -61,4 +61,21 @@ Next, lets add the badUIBattle front of the tp1. I want the page to only scroll 
 
 ---
 
+## 5 — Sacar el still, scroll aleatorio, lluvia inestable
+
+```
+its ok, commit the changes.
+remove the hero visual figure, its too long and makes the code illegible .
+Also, make the scroll bar not to be constant, make it random so you can scroll a little and be moved a lot or a little, never the same.
+make the rainning letters change speed so the user gets confused
+```
+
+**Por qué:** el still embebido inflaba `index.html` y lo volvía ilegible. El scroll invertido aún era predecible; faltaba que la distancia y la lluvia también mintieran.
+
+**Qué devolvió:** commit del frente Bad UI (`0c4b38c`); se sacó el `<figure>` del hero (y el data URI); cada gesto de scroll aplica un factor aleatorio; cada columna de lluvia cambia de velocidad (y hay ráfagas globales).
+
+**Qué hice con eso:** lo acepté. “Looks perfect”; se commitea, se pushea y se pide esconder la barra y dejar solo la explicación en el portal.
+
+---
+
 ## Conversación completa
