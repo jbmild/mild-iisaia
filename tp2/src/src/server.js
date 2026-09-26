@@ -21,6 +21,7 @@ app.use(intakes(db));
 app.use(orders(db));
 
 const specPath = path.join(__dirname, "..", "openapi.yaml");
+fs.copyFileSync(specPath, path.join(__dirname, "..", "..", "openapi.yaml"));
 const spec = yaml.load(fs.readFileSync(specPath, "utf8"));
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(spec, { customSiteTitle: "API de depósito" }));
 
