@@ -1,0 +1,1388 @@
+openapi: 3.1.0
+info:
+  title: API de depósito
+  version: "1.0.0"
+  description: |
+    Categorías y productos, lugares (depósito, pasillo, fila, estante, bin)
+    y stock solo en bins. Un ingreso asigna la cantidad escaneada a uno o más
+    bins y la suma una sola vez al completarse. Un pedido se pickea desde bins
+    hacia un cartón y se embala cuando cada línea está completa.
+servers:
+  - url: http://localhost:3000
+tags:
+  - name: Categorías
+  - name: Productos
+  - name: Lugares
+  - name: Ingresos
+  - name: Pedidos
+paths:
+  /categories:
+    get:
+      tags: [Categorías]
+      operationId: listCategories
+      summary: Listar categorías
+      responses:
+        "200":
+          description: Categorías
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+    post:
+      tags: [Categorías]
+      operationId: createCategory
+      summary: Crear una categoría
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryWrite"
+      responses:
+        "201":
+          description: Categoría creada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /categories/{categoryId}:
+    parameters:
+      - $ref: "#/components/parameters/categoryId"
+    get:
+      tags: [Categorías]
+      operationId: getCategory
+      summary: Leer una categoría
+      responses:
+        "200":
+          description: Categoría
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags: [Categorías]
+      operationId: updateCategory
+      summary: Cambiar el nombre
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryWrite"
+      responses:
+        "200":
+          description: Categoría actualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+    delete:
+      tags: [Categorías]
+      operationId: deleteCategory
+      summary: Borrar una categoría sin productos
+      responses:
+        "204":
+          description: Borrada
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /products:
+    get:
+      tags: [Productos]
+      operationId: listProducts
+      summary: Listar productos o buscar por SKU
+      parameters:
+        - name: sku
+          in: query
+          required: false
+          description: Escaneo. Coincidencia exacta del SKU.
+          schema:
+            type: string
+            minLength: 1
+      responses:
+        "200":
+          description: Productos. Si se pasa sku y no hay coincidencia, la lista va vacía.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+    post:
+      tags: [Productos]
+      operationId: createProduct
+      summary: Crear un producto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductWrite"
+      responses:
+        "201":
+          description: Producto creado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /products/{productId}:
+    parameters:
+      - $ref: "#/components/parameters/productId"
+    get:
+      tags: [Productos]
+      operationId: getProduct
+      summary: Leer un producto
+      responses:
+        "200":
+          description: Producto
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags: [Productos]
+      operationId: updateProduct
+      summary: Cambiar SKU, nombre o categoría
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductPatch"
+      responses:
+        "200":
+          description: Producto actualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+    delete:
+      tags: [Productos]
+      operationId: deleteProduct
+      summary: Borrar un producto sin stock, ingresos ni pedidos
+      responses:
+        "204":
+          description: Borrado
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /products/{productId}/stock:
+    parameters:
+      - $ref: "#/components/parameters/productId"
+    get:
+      tags: [Productos]
+      operationId: getProductStock
+      summary: Saldos del producto por bin
+      responses:
+        "200":
+          description: Saldos. La cantidad no se edita por acá.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductStock"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /warehouses:
+    get:
+      tags: [Lugares]
+      operationId: listWarehouses
+      summary: Listar depósitos
+      responses:
+        "200":
+          description: Depósitos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Warehouse"
+    post:
+      tags: [Lugares]
+      operationId: createWarehouse
+      summary: Crear un depósito
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WarehouseWrite"
+      responses:
+        "201":
+          description: Depósito creado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Warehouse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /warehouses/{warehouseId}:
+    parameters:
+      - $ref: "#/components/parameters/warehouseId"
+    get:
+      tags: [Lugares]
+      operationId: getWarehouse
+      summary: Leer un depósito
+      responses:
+        "200":
+          description: Depósito
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Warehouse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags: [Lugares]
+      operationId: updateWarehouse
+      summary: Cambiar código o nombre
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WarehousePatch"
+      responses:
+        "200":
+          description: Depósito actualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Warehouse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+    delete:
+      tags: [Lugares]
+      operationId: deleteWarehouse
+      summary: Borrar un depósito sin pasillos
+      responses:
+        "204":
+          description: Borrado
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /warehouses/{warehouseId}/aisles:
+    parameters:
+      - $ref: "#/components/parameters/warehouseId"
+    get:
+      tags: [Lugares]
+      operationId: listAisles
+      summary: Listar pasillos de un depósito
+      responses:
+        "200":
+          description: Pasillos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Aisle"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      tags: [Lugares]
+      operationId: createAisle
+      summary: Crear un pasillo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CodeWrite"
+      responses:
+        "201":
+          description: Pasillo creado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Aisle"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /aisles/{aisleId}:
+    parameters:
+      - $ref: "#/components/parameters/aisleId"
+    get:
+      tags: [Lugares]
+      operationId: getAisle
+      summary: Leer un pasillo
+      responses:
+        "200":
+          description: Pasillo
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Aisle"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags: [Lugares]
+      operationId: updateAisle
+      summary: Cambiar el código
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CodeWrite"
+      responses:
+        "200":
+          description: Pasillo actualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Aisle"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+    delete:
+      tags: [Lugares]
+      operationId: deleteAisle
+      summary: Borrar un pasillo sin filas
+      responses:
+        "204":
+          description: Borrado
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /aisles/{aisleId}/rows:
+    parameters:
+      - $ref: "#/components/parameters/aisleId"
+    get:
+      tags: [Lugares]
+      operationId: listRows
+      summary: Listar filas de un pasillo
+      responses:
+        "200":
+          description: Filas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Row"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      tags: [Lugares]
+      operationId: createRow
+      summary: Crear una fila
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CodeWrite"
+      responses:
+        "201":
+          description: Fila creada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Row"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /rows/{rowId}:
+    parameters:
+      - $ref: "#/components/parameters/rowId"
+    get:
+      tags: [Lugares]
+      operationId: getRow
+      summary: Leer una fila
+      responses:
+        "200":
+          description: Fila
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Row"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags: [Lugares]
+      operationId: updateRow
+      summary: Cambiar el código
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CodeWrite"
+      responses:
+        "200":
+          description: Fila actualizada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Row"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+    delete:
+      tags: [Lugares]
+      operationId: deleteRow
+      summary: Borrar una fila sin estantes
+      responses:
+        "204":
+          description: Borrada
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /rows/{rowId}/shelves:
+    parameters:
+      - $ref: "#/components/parameters/rowId"
+    get:
+      tags: [Lugares]
+      operationId: listShelves
+      summary: Listar estantes de una fila
+      responses:
+        "200":
+          description: Estantes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Shelf"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      tags: [Lugares]
+      operationId: createShelf
+      summary: Crear un estante
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CodeWrite"
+      responses:
+        "201":
+          description: Estante creado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shelf"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /shelves/{shelfId}:
+    parameters:
+      - $ref: "#/components/parameters/shelfId"
+    get:
+      tags: [Lugares]
+      operationId: getShelf
+      summary: Leer un estante
+      responses:
+        "200":
+          description: Estante
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shelf"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags: [Lugares]
+      operationId: updateShelf
+      summary: Cambiar el código
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CodeWrite"
+      responses:
+        "200":
+          description: Estante actualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Shelf"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+    delete:
+      tags: [Lugares]
+      operationId: deleteShelf
+      summary: Borrar un estante sin bins
+      responses:
+        "204":
+          description: Borrado
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /shelves/{shelfId}/bins:
+    parameters:
+      - $ref: "#/components/parameters/shelfId"
+    get:
+      tags: [Lugares]
+      operationId: listBins
+      summary: Listar bins de un estante
+      responses:
+        "200":
+          description: Bins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Bin"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    post:
+      tags: [Lugares]
+      operationId: createBin
+      summary: Crear un bin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CodeWrite"
+      responses:
+        "201":
+          description: Bin creado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bin"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /bins/{binId}:
+    parameters:
+      - $ref: "#/components/parameters/binId"
+    get:
+      tags: [Lugares]
+      operationId: getBin
+      summary: Leer un bin
+      responses:
+        "200":
+          description: Bin
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bin"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags: [Lugares]
+      operationId: updateBin
+      summary: Cambiar el código
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CodeWrite"
+      responses:
+        "200":
+          description: Bin actualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bin"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+    delete:
+      tags: [Lugares]
+      operationId: deleteBin
+      summary: Borrar un bin sin stock ni movimientos
+      responses:
+        "204":
+          description: Borrado
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /bins/{binId}/stock:
+    parameters:
+      - $ref: "#/components/parameters/binId"
+    get:
+      tags: [Lugares]
+      operationId: getBinStock
+      summary: Saldos de un bin
+      responses:
+        "200":
+          description: Saldos del bin
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BinStock"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /intakes:
+    get:
+      tags: [Ingresos]
+      operationId: listIntakes
+      summary: Listar ingresos
+      responses:
+        "200":
+          description: Ingresos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Intake"
+    post:
+      tags: [Ingresos]
+      operationId: openIntake
+      summary: Abrir un ingreso
+      responses:
+        "201":
+          description: Ingreso abierto
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Intake"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+  /intakes/{intakeId}:
+    parameters:
+      - $ref: "#/components/parameters/intakeId"
+    get:
+      tags: [Ingresos]
+      operationId: getIntake
+      summary: Leer un ingreso
+      responses:
+        "200":
+          description: Ingreso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Intake"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /intakes/{intakeId}/lines:
+    parameters:
+      - $ref: "#/components/parameters/intakeId"
+    post:
+      tags: [Ingresos]
+      operationId: addIntakeLine
+      summary: Escanear un producto y asignarlo a bins
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IntakeLineWrite"
+      responses:
+        "201":
+          description: Línea creada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IntakeLine"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /intakes/{intakeId}/complete:
+    parameters:
+      - $ref: "#/components/parameters/intakeId"
+    post:
+      tags: [Ingresos]
+      operationId: completeIntake
+      summary: Sumar las cantidades al stock, una sola vez
+      responses:
+        "200":
+          description: Ingreso completado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Intake"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /orders:
+    get:
+      tags: [Pedidos]
+      operationId: listOrders
+      summary: Listar pedidos
+      responses:
+        "200":
+          description: Pedidos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+    post:
+      tags: [Pedidos]
+      operationId: createOrder
+      summary: Abrir un pedido
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderWrite"
+      responses:
+        "201":
+          description: Pedido abierto
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /orders/{orderId}:
+    parameters:
+      - $ref: "#/components/parameters/orderId"
+    get:
+      tags: [Pedidos]
+      operationId: getOrder
+      summary: Leer un pedido
+      responses:
+        "200":
+          description: Pedido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /orders/{orderId}/cartons:
+    parameters:
+      - $ref: "#/components/parameters/orderId"
+    post:
+      tags: [Pedidos]
+      operationId: openCarton
+      summary: Abrir un cartón
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CodeWrite"
+      responses:
+        "201":
+          description: Cartón abierto
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Carton"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /orders/{orderId}/cartons/{cartonId}/picks:
+    parameters:
+      - $ref: "#/components/parameters/orderId"
+      - $ref: "#/components/parameters/cartonId"
+    post:
+      tags: [Pedidos]
+      operationId: pickIntoCarton
+      summary: Retirar cantidad de un bin hacia el cartón
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PickWrite"
+      responses:
+        "201":
+          description: Pick registrado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pick"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /orders/{orderId}/pack:
+    parameters:
+      - $ref: "#/components/parameters/orderId"
+    post:
+      tags: [Pedidos]
+      operationId: packOrder
+      summary: Embalar el pedido cuando cada línea está pickeada
+      responses:
+        "200":
+          description: Pedido embalado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+components:
+  parameters:
+    categoryId:
+      name: categoryId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    productId:
+      name: productId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    warehouseId:
+      name: warehouseId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    aisleId:
+      name: aisleId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    rowId:
+      name: rowId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    shelfId:
+      name: shelfId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    binId:
+      name: binId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    intakeId:
+      name: intakeId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    orderId:
+      name: orderId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    cartonId:
+      name: cartonId
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+  responses:
+    BadRequest:
+      description: El cuerpo o el id no cumplen el contrato
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFound:
+      description: No existe ese recurso
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Conflict:
+      description: El estado actual no permite la operación
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+    Category:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        name:
+          type: string
+    CategoryWrite:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          minLength: 1
+    Product:
+      type: object
+      required: [id, sku, name, categoryId]
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        sku:
+          type: string
+        name:
+          type: string
+        categoryId:
+          type: integer
+          minimum: 1
+    ProductWrite:
+      type: object
+      required: [sku, name, categoryId]
+      properties:
+        sku:
+          type: string
+          minLength: 1
+        name:
+          type: string
+          minLength: 1
+        categoryId:
+          type: integer
+          minimum: 1
+    ProductPatch:
+      type: object
+      minProperties: 1
+      properties:
+        sku:
+          type: string
+          minLength: 1
+        name:
+          type: string
+          minLength: 1
+        categoryId:
+          type: integer
+          minimum: 1
+    ProductBalance:
+      type: object
+      required: [binId, quantity, binCode, shelfId, shelfCode, rowId, rowCode, aisleId, aisleCode, warehouseId, warehouseCode]
+      properties:
+        binId:
+          type: integer
+        quantity:
+          type: integer
+          minimum: 0
+        binCode:
+          type: string
+        shelfId:
+          type: integer
+        shelfCode:
+          type: string
+        rowId:
+          type: integer
+        rowCode:
+          type: string
+        aisleId:
+          type: integer
+        aisleCode:
+          type: string
+        warehouseId:
+          type: integer
+        warehouseCode:
+          type: string
+    ProductStock:
+      type: object
+      required: [productId, total, balances]
+      properties:
+        productId:
+          type: integer
+        total:
+          type: integer
+          minimum: 0
+        balances:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductBalance"
+    Warehouse:
+      type: object
+      required: [id, code, name]
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        name:
+          type: string
+    WarehouseWrite:
+      type: object
+      required: [code, name]
+      properties:
+        code:
+          type: string
+          minLength: 1
+        name:
+          type: string
+          minLength: 1
+    WarehousePatch:
+      type: object
+      minProperties: 1
+      properties:
+        code:
+          type: string
+          minLength: 1
+        name:
+          type: string
+          minLength: 1
+    CodeWrite:
+      type: object
+      required: [code]
+      properties:
+        code:
+          type: string
+          minLength: 1
+    Aisle:
+      type: object
+      required: [id, code, warehouseId]
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        warehouseId:
+          type: integer
+    Row:
+      type: object
+      required: [id, code, aisleId]
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        aisleId:
+          type: integer
+    Shelf:
+      type: object
+      required: [id, code, rowId]
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        rowId:
+          type: integer
+    Bin:
+      type: object
+      required: [id, code, shelfId]
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        shelfId:
+          type: integer
+    BinBalance:
+      type: object
+      required: [productId, sku, name, quantity]
+      properties:
+        productId:
+          type: integer
+        sku:
+          type: string
+        name:
+          type: string
+        quantity:
+          type: integer
+          minimum: 0
+    BinStock:
+      type: object
+      required: [binId, balances]
+      properties:
+        binId:
+          type: integer
+        balances:
+          type: array
+          items:
+            $ref: "#/components/schemas/BinBalance"
+    Allocation:
+      type: object
+      required: [id, binId, quantity]
+      properties:
+        id:
+          type: integer
+        binId:
+          type: integer
+        quantity:
+          type: integer
+          minimum: 1
+    AllocationWrite:
+      type: object
+      required: [binId, quantity]
+      properties:
+        binId:
+          type: integer
+          minimum: 1
+        quantity:
+          type: integer
+          minimum: 1
+    IntakeLine:
+      type: object
+      required: [id, productId, quantity, allocations]
+      properties:
+        id:
+          type: integer
+        productId:
+          type: integer
+        quantity:
+          type: integer
+          minimum: 1
+        allocations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Allocation"
+    IntakeLineWrite:
+      type: object
+      required: [productId, quantity, allocations]
+      properties:
+        productId:
+          type: integer
+          minimum: 1
+        quantity:
+          type: integer
+          minimum: 1
+        allocations:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/AllocationWrite"
+    Intake:
+      type: object
+      required: [id, status, createdAt, lines]
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          enum: [open, completed]
+        createdAt:
+          type: string
+          format: date-time
+        lines:
+          type: array
+          items:
+            $ref: "#/components/schemas/IntakeLine"
+    OrderLineWrite:
+      type: object
+      required: [productId, quantity]
+      properties:
+        productId:
+          type: integer
+          minimum: 1
+        quantity:
+          type: integer
+          minimum: 1
+    OrderWrite:
+      type: object
+      required: [lines]
+      properties:
+        lines:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/OrderLineWrite"
+    OrderLine:
+      type: object
+      required: [productId, quantity, picked]
+      properties:
+        productId:
+          type: integer
+        quantity:
+          type: integer
+          minimum: 1
+        picked:
+          type: integer
+          minimum: 0
+    Pick:
+      type: object
+      required: [id, productId, binId, quantity]
+      properties:
+        id:
+          type: integer
+        productId:
+          type: integer
+        binId:
+          type: integer
+        quantity:
+          type: integer
+          minimum: 1
+    PickWrite:
+      type: object
+      required: [productId, binId, quantity]
+      properties:
+        productId:
+          type: integer
+          minimum: 1
+        binId:
+          type: integer
+          minimum: 1
+        quantity:
+          type: integer
+          minimum: 1
+    Carton:
+      type: object
+      required: [id, code, picks]
+      properties:
+        id:
+          type: integer
+        code:
+          type: string
+        picks:
+          type: array
+          items:
+            $ref: "#/components/schemas/Pick"
+    Order:
+      type: object
+      required: [id, status, createdAt, lines, cartons]
+      properties:
+        id:
+          type: integer
+        status:
+          type: string
+          enum: [open, packed]
+        createdAt:
+          type: string
+          format: date-time
+        lines:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderLine"
+        cartons:
+          type: array
+          items:
+            $ref: "#/components/schemas/Carton"
