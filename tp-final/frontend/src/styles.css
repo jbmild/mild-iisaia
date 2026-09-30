@@ -1,0 +1,300 @@
+:root {
+  color: #1c1915;
+  background: #f3efe7;
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  line-height: 1.4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: 1px solid #cfc6b8;
+  background: #fffdf9;
+  color: inherit;
+  border-radius: 6px;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+button.primary {
+  background: #8c3a1e;
+  border-color: #8c3a1e;
+  color: #fffaf6;
+}
+
+button.danger {
+  background: #8f1d1d;
+  border-color: #8f1d1d;
+  color: #fffaf6;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 15rem 1fr;
+  min-height: 100vh;
+}
+
+.types {
+  background: #1c1915;
+  color: #f6f1e8;
+  padding: 1.25rem 0.75rem;
+}
+
+.brand {
+  margin: 0 0.6rem 1rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.types nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.types button {
+  text-align: left;
+  background: transparent;
+  color: inherit;
+  border: 0;
+  border-left: 3px solid transparent;
+  border-radius: 0;
+  padding: 0.4rem 0.7rem;
+}
+
+.types button.selected {
+  background: #2b2620;
+  border-left-color: #e08a5d;
+}
+
+main {
+  min-width: 0;
+  padding: 1.25rem 1.5rem 2rem;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+
+.toolbar h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.toolbar p {
+  margin: 0.15rem 0 0;
+  color: #5c564e;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+input[type="search"] {
+  border: 1px solid #cfc6b8;
+  background: #fffdf9;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  min-width: 12rem;
+}
+
+.banner,
+.confirm {
+  background: #f8e8e4;
+  border: 1px solid #e3b2a6;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+}
+
+.confirm {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.empty {
+  color: #5c564e;
+}
+
+.table-wrap {
+  overflow: auto;
+  max-height: calc(100vh - 8.5rem);
+  border: 1px solid #e4ddd2;
+  border-radius: 8px;
+  background: #fffdf9;
+}
+
+table {
+  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+  font-size: 0.9rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.45rem 0.7rem;
+  border-bottom: 1px solid #eee7dc;
+  white-space: nowrap;
+  max-width: 18rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: #fffdf9;
+  z-index: 1;
+}
+
+th.part,
+td.part {
+  position: sticky;
+  left: 0;
+  background: #fffdf9;
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  z-index: 1;
+}
+
+th.part {
+  z-index: 3;
+}
+
+th.actions,
+td.actions {
+  position: sticky;
+  right: 0;
+  background: #fffdf9;
+  z-index: 1;
+}
+
+th.actions {
+  z-index: 3;
+}
+
+td.actions {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 25, 21, 0.45);
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  z-index: 5;
+}
+
+.dialog {
+  width: min(46rem, 100%);
+  max-height: calc(100vh - 3rem);
+  overflow: auto;
+  background: #fffdf9;
+  border-radius: 12px;
+  padding: 1.25rem 1.4rem 1.4rem;
+}
+
+.dialog h2 {
+  margin: 0;
+}
+
+.hint {
+  margin: 0.25rem 0 1rem;
+  color: #5c564e;
+}
+
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1rem;
+}
+
+.fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.fields label.wide {
+  grid-column: 1 / -1;
+}
+
+.fields input,
+.fields textarea {
+  border: 1px solid #cfc6b8;
+  border-radius: 6px;
+  padding: 0.4rem 0.55rem;
+  background: white;
+}
+
+.fields textarea {
+  min-height: 4.5rem;
+  resize: vertical;
+}
+
+abbr {
+  text-decoration: none;
+  color: #8c3a1e;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 800px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+
+  .types nav {
+    flex-direction: row;
+    overflow: auto;
+  }
+
+  .types button {
+    white-space: nowrap;
+  }
+
+  .toolbar,
+  .toolbar-actions,
+  .confirm {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .fields {
+    grid-template-columns: 1fr;
+  }
+}

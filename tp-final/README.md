@@ -2,7 +2,7 @@
 
 Gestor de los componentes que usa Altium Designer. La base es PostgreSQL: Altium la lee por ODBC con un DbLib. Cada hoja de `data/cdb.xls` es una tabla.
 
-Estado: en curso. La base y la API están en esta rama. La interfaz va en la siguiente.
+Estado: en curso.
 
 ## Cómo se ejecuta
 
@@ -54,6 +54,17 @@ El `Part Number` va codificado en la ruta (`encodeURIComponent`). Puede traer es
 
 El servidor está en `backend/src`: `router` recibe la ruta, `controller` traduce HTTP, `service` valida, `repository` habla con PostgreSQL y `entity` es el componente más el catálogo de tablas. Hay una sola entidad: el tipo es el nombre de la tabla y las columnas salen del catálogo. Un nombre de tabla o de columna que no esté ahí se rechaza.
 
+### Interfaz
+
+Desde `tp-final/frontend/`, con la API ya levantada:
+
+```bash
+npm install
+npm run dev
+```
+
+Abrir `http://localhost:5173`. El dev server reenvía `/api` a `localhost:3000`. A la izquierda están los tipos; la tabla muestra las columnas de ese tipo. Nuevo, editar y borrar usan el formulario. Los nombres de columna quedan como en Altium.
+
 ## Qué me propuse construir
 
 Un gestor de componentes para Altium, a partir de `cdb.xls`. La base se conecta directo con Altium y Altium la consume. El gestor es React + TypeScript + PostgreSQL, con el servidor en capas router → controller → service → repository → entity.
@@ -90,6 +101,8 @@ El archivo `.DbLib` se arma en Altium, en Windows. Esta máquina no lo puede pro
 `Manufacturer PN` no sirve como clave. `SM712-02HTG` está dos veces en `TVS` (otro símbolo) y `Generic_0805` / `Generic_1206` están dos veces en `RESISTOR` (huella comercial y huella MIL). Por eso la clave es `Part Number` y el PN del fabricante no se reescribe.
 
 La hoja `MISC` repite el encabezado `Description` en una columna vacía. PostgreSQL no admite dos columnas con el mismo nombre: esa columna no se crea.
+
+Al cambiar de tipo, la tabla anterior quedaba un instante bajo el título nuevo. El cambio vacía la lista y muestra «Cargando…» hasta que llega la del tipo elegido.
 
 ## Prompts
 
