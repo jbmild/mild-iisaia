@@ -2,9 +2,11 @@
 
 Gestor de los componentes que usa Altium Designer. La base es PostgreSQL: Altium la lee por ODBC con un DbLib. Cada hoja de `data/cdb.xls` es una tabla.
 
-Estado: en curso. En esta rama está la base. La API y la interfaz van en las ramas siguientes.
+Estado: en curso.
 
 ## Cómo se ejecuta
+
+### Base
 
 Desde `tp-final/`:
 
@@ -26,6 +28,42 @@ docker compose up -d
 ```bash
 python3 db/generate.py
 ```
+
+### API
+
+Desde `tp-final/backend/`, con la base ya levantada:
+
+```bash
+npm install
+npm run build
+npm start
+```
+
+La API queda en `http://localhost:3000`. Usa `DATABASE_URL` si está definida; si no, `postgres://components:components@localhost:5432/components`.
+
+| Método | Ruta | Respuesta |
+|--------|------|-----------|
+| `GET` | `/api/component-types` | `200` catálogo de tablas y columnas |
+| `GET` | `/api/components/:type` | `200` filas · `404` tipo desconocido |
+| `POST` | `/api/components/:type` | `201` fila creada · `400` falta un campo obligatorio · `409` `Part Number` repetido |
+| `GET` | `/api/components/:type/:partNumber` | `200` fila · `404` no existe |
+| `PUT` | `/api/components/:type/:partNumber` | `200` fila · `404` no existe · `409` clave repetida |
+| `DELETE` | `/api/components/:type/:partNumber` | `204` · `404` no existe |
+
+El `Part Number` va codificado en la ruta (`encodeURIComponent`). Puede traer espacios y `/`. Obligatorios en el cuerpo: `Part Number`, `Library Ref` y `Footprint Ref`.
+
+El servidor está en `backend/src`: `router` recibe la ruta, `controller` traduce HTTP, `service` valida, `repository` habla con PostgreSQL y `entity` es el componente más el catálogo de tablas. Hay una sola entidad: el tipo es el nombre de la tabla y las columnas salen del catálogo. Un nombre de tabla o de columna que no esté ahí se rechaza.
+
+### Interfaz
+
+Desde `tp-final/frontend/`, con la API ya levantada:
+
+```bash
+npm install
+npm run dev
+```
+
+Abrir `http://localhost:5173`. El dev server reenvía `/api` a `localhost:3000`. A la izquierda están los tipos; la tabla muestra las columnas de ese tipo. Nuevo, editar y borrar usan el formulario. Los nombres de columna quedan como en Altium.
 
 ## Qué me propuse construir
 
@@ -63,6 +101,8 @@ El archivo `.DbLib` se arma en Altium, en Windows. Esta máquina no lo puede pro
 `Manufacturer PN` no sirve como clave. `SM712-02HTG` está dos veces en `TVS` (otro símbolo) y `Generic_0805` / `Generic_1206` están dos veces en `RESISTOR` (huella comercial y huella MIL). Por eso la clave es `Part Number` y el PN del fabricante no se reescribe.
 
 La hoja `MISC` repite el encabezado `Description` en una columna vacía. PostgreSQL no admite dos columnas con el mismo nombre: esa columna no se crea.
+
+Al cambiar de tipo, la tabla anterior quedaba un instante bajo el título nuevo. El cambio vacía la lista y muestra «Cargando…» hasta que llega la del tipo elegido.
 
 ## Prompts
 
