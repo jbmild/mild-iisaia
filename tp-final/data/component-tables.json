@@ -1,0 +1,521 @@
+{
+  "tables": [
+    {
+      "name": "CAPACITOR",
+      "columns": [
+        "Part Number",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Value",
+        "Type",
+        "Package Imperial",
+        "Package Metric",
+        "Case",
+        "ESR",
+        "Voltage",
+        "Tolerance",
+        "Temp Range",
+        "Temp Coef",
+        "Failure Rate",
+        "Features",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "INDUCTOR",
+      "columns": [
+        "Part Number",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Value",
+        "Package Imperial",
+        "Package Metric",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "FERRITE",
+      "columns": [
+        "Part Number",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Package",
+        "Lines",
+        "Impedance",
+        "Current",
+        "Temp Range",
+        "DC Resistance",
+        "Features",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "RELAY",
+      "columns": [
+        "Part Number",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Relay Type",
+        "Coil Type",
+        "Coil Current",
+        "Coil Voltage",
+        "Contact Form",
+        "Contact Current",
+        "Switching Voltage",
+        "Turn On Voltage (Max)",
+        "Turn Off Voltage (Min)",
+        "Operate Time",
+        "Release Time",
+        "Mounting Type",
+        "Termination Style",
+        "Operating Temperature",
+        "Coil Power",
+        "Coil Resistance",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "SWITCH",
+      "columns": [
+        "Part Number",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Package",
+        "Circuit",
+        "Current Rating",
+        "Voltage",
+        "Temp Range",
+        "Features",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "DIODE",
+      "columns": [
+        "Part Number",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Package",
+        "Type",
+        "Zener Voltage",
+        "Power",
+        "IF",
+        "VR",
+        "IR",
+        "Temp Range",
+        "Features",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "TVS",
+      "columns": [
+        "Part Number",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Package",
+        "Unidirectional Channels",
+        "Bidirectional Channels",
+        "Power - Peak Pulse",
+        "Voltage Reverse Standoff",
+        "Voltage Breakdown",
+        "Voltage Clamping @ Ipp",
+        "Current Peak Pulse",
+        "Leakage Current",
+        "Temp Range",
+        "Features",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description",
+        "Notes"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "LED",
+      "columns": [
+        "Part Number",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Package Imperial",
+        "Package Metric",
+        "Color",
+        "VF",
+        "IF",
+        "Wavelength",
+        "Candelas",
+        "Failure Rate",
+        "Features",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "OPTO",
+      "columns": [
+        "Part Number",
+        "Function",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Package",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "BJT",
+      "columns": [
+        "Part Number",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Package",
+        "Type",
+        "Icmax",
+        "VCEBmax",
+        "VCEsat @ Ib, Ic",
+        "ICB0",
+        "HFEmin @ Ic, Vce",
+        "Pmax",
+        "BW",
+        "Tjmax",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "MOSFET",
+      "columns": [
+        "Part Number",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Package",
+        "Type",
+        "VDSS",
+        "ID",
+        "VGSth",
+        "Temp Range",
+        "Features",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "IC",
+      "columns": [
+        "Part Number",
+        "Function",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Package",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "MISC",
+      "columns": [
+        "Part Number",
+        "Key",
+        "Description",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "RESISTOR",
+      "columns": [
+        "Part Number",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Value",
+        "Package Imperial",
+        "Package Metric",
+        "Composition",
+        "Power",
+        "Voltage",
+        "Tolerance",
+        "Temp Range",
+        "Temp Coef",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "SSR",
+      "columns": [
+        "Part Number",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Package",
+        "Circuit",
+        "Output Type",
+        "Load Current",
+        "Voltage – Input",
+        "Voltage – Load",
+        "On-State Resistance",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "XTAL",
+      "columns": [
+        "Part Number",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Freq",
+        "Package",
+        "Freq Stability",
+        "Freq Tolerance",
+        "Load Capacitance",
+        "ESR",
+        "Temp Range",
+        "Features",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    },
+    {
+      "name": "FUSE",
+      "columns": [
+        "Part Number",
+        "Manufacturer",
+        "Series",
+        "Manufacturer PN",
+        "Fuse / Holder",
+        "Type",
+        "Current Rating",
+        "Voltage Rating",
+        "Response Time",
+        "Package / Case",
+        "Mounting Type",
+        "Melting I2t",
+        "Temperature",
+        "Library Ref",
+        "Library Path",
+        "Footprint Ref",
+        "Footprint Path",
+        "Footprint Ref 2",
+        "Footprint Path 2",
+        "Footprint Ref 3",
+        "Footprint Path 3",
+        "Description"
+      ],
+      "required": [
+        "Part Number",
+        "Library Ref",
+        "Footprint Ref"
+      ]
+    }
+  ]
+}
