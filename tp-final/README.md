@@ -2,9 +2,11 @@
 
 Gestor de los componentes que usa Altium Designer. La base es PostgreSQL: Altium la lee por ODBC con un DbLib. Cada hoja de `data/cdb.xls` es una tabla.
 
-Estado: en curso. En esta rama está la base. La API y la interfaz van en las ramas siguientes.
+Estado: en curso. La base y la API están en esta rama. La interfaz va en la siguiente.
 
 ## Cómo se ejecuta
+
+### Base
 
 Desde `tp-final/`:
 
@@ -26,6 +28,31 @@ docker compose up -d
 ```bash
 python3 db/generate.py
 ```
+
+### API
+
+Desde `tp-final/backend/`, con la base ya levantada:
+
+```bash
+npm install
+npm run build
+npm start
+```
+
+La API queda en `http://localhost:3000`. Usa `DATABASE_URL` si está definida; si no, `postgres://components:components@localhost:5432/components`.
+
+| Método | Ruta | Respuesta |
+|--------|------|-----------|
+| `GET` | `/api/component-types` | `200` catálogo de tablas y columnas |
+| `GET` | `/api/components/:type` | `200` filas · `404` tipo desconocido |
+| `POST` | `/api/components/:type` | `201` fila creada · `400` falta un campo obligatorio · `409` `Part Number` repetido |
+| `GET` | `/api/components/:type/:partNumber` | `200` fila · `404` no existe |
+| `PUT` | `/api/components/:type/:partNumber` | `200` fila · `404` no existe · `409` clave repetida |
+| `DELETE` | `/api/components/:type/:partNumber` | `204` · `404` no existe |
+
+El `Part Number` va codificado en la ruta (`encodeURIComponent`). Puede traer espacios y `/`. Obligatorios en el cuerpo: `Part Number`, `Library Ref` y `Footprint Ref`.
+
+El servidor está en `backend/src`: `router` recibe la ruta, `controller` traduce HTTP, `service` valida, `repository` habla con PostgreSQL y `entity` es el componente más el catálogo de tablas. Hay una sola entidad: el tipo es el nombre de la tabla y las columnas salen del catálogo. Un nombre de tabla o de columna que no esté ahí se rechaza.
 
 ## Qué me propuse construir
 
