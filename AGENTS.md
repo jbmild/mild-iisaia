@@ -55,6 +55,8 @@ Each delivery `README.md` must include: how to run it, what was specified *befor
 
 From week 6 onward, also keep spec/plan files on disk and use branches + pull requests.
 
+For `tp-final/`, follow [`tp-final/AGENTS.md`](tp-final/AGENTS.md): plan each prompt, wait for confirmation, and open a pull request for every change (stacked when one prompt has more than one reviewable change).
+
 ## Do not
 
 - Edit `Material/` unless the student explicitly asks to change course files.
