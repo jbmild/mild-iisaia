@@ -10,7 +10,7 @@ This is coursework, not the course-authoring repo. The student is the architectu
 |------|------|
 | `README.md` | Repo **index**: who, which delivery, status. Keep the table in sync. |
 | `tp1/` `tp2/` `tp-final/` | One folder per graded delivery. Each folder's `README.md` is the **report**. |
-| `Material/` | Official course content (gitignored). Read it; do not edit or commit it. |
+| `Material/` | Official course content, as a git submodule of `FIUBA-Posgrado-Inteligencia-Artificial/IISAIA`. Read it; do not edit it. |
 | `Material/programa.md` | Canonical syllabus and weekly schedule. |
 | `Material/semanas/NN/` | Week N slides (`slides/index.html`) and source (`source_material/`). |
 | `Material/semanas/00/source_material/` | How the repo is graded and how folders should look. |
@@ -23,7 +23,7 @@ This is coursework, not the course-authoring repo. The student is the architectu
 4. Student-facing files (`README.md`, `prompts.md`, comments meant for the teacher) are in **Spanish**. Chat with the student may be in English or Spanish — match the student.
 5. Treat the student as reviewer, not as a passenger: surface architecture choices, propose alternatives, wait for a decision on anything that would show up under "Decisiones que tomé yo".
 6. For TP1, keep `tp1/prompts.md` current (see below). Do not wait until the delivery is finished.
-7. Commit history is evidence. Prefer small commits with messages that describe *why*. Do not squash the process into one "entrega" commit. Do not commit `Material/`.
+7. Commit history is evidence. Prefer small commits with messages that describe *why*. Do not squash the process into one "entrega" commit. Do not commit changes inside the `Material/` submodule.
 
 ## TP1 prompt log (`tp1/prompts.md`)
 
