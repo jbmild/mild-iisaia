@@ -6,21 +6,19 @@ Estado: en curso.
 
 ## Cómo se ejecuta
 
-### Base
-
-Desde `tp-final/`:
+Desde `tp-final/`, un solo comando levanta la base, la API y la interfaz:
 
 ```bash
-docker compose up -d
+docker compose up --build -d
 ```
 
-PostgreSQL 16 queda en `localhost:5432`. Base, usuario y contraseña: `components`.
+La interfaz queda en `http://localhost:5173`. Nginx reenvía `/api` al backend. La API también se puede llamar en `http://localhost:3000`. PostgreSQL 16 queda en `localhost:5432`. Base, usuario y contraseña: `components`.
 
 Los scripts `db/001_tables.sql` y `db/002_seed.sql` corren solo la primera vez, cuando el volumen está vacío. Para volver a cargar el Excel hay que borrar el volumen:
 
 ```bash
 docker compose down -v
-docker compose up -d
+docker compose up --build -d
 ```
 
 `db/generate.py` regenera el SQL y `data/component-tables.json` desde `data/cdb.xls`:
@@ -31,7 +29,7 @@ python3 db/generate.py
 
 ### API
 
-Desde `tp-final/backend/`, con la base ya levantada:
+Sin Docker, desde `tp-final/backend/`, con la base ya levantada:
 
 ```bash
 npm install
@@ -56,7 +54,7 @@ El servidor está en `backend/src`: `router` recibe la ruta, `controller` traduc
 
 ### Interfaz
 
-Desde `tp-final/frontend/`, con la API ya levantada:
+Sin Docker, desde `tp-final/frontend/`, con la API ya levantada:
 
 ```bash
 npm install
@@ -77,6 +75,7 @@ Un gestor de componentes para Altium, a partir de `cdb.xls`. La base se conecta 
 - La unicidad entre tablas vive en `app.part_number`, con un trigger. Ese schema no es una biblioteca: en el DbLib, Include Table Schema Names queda apagado.
 - No hay `id` ni fechas. Altium convierte cada columna en un parámetro o en un modelo.
 - Celdas vacías se guardan como NULL. Todas las columnas son texto, porque los valores del Excel son texto (`5VDC`, `10A`).
+- `docker compose up --build -d` levanta las tres cosas. En Docker la interfaz es el build de Vite servido por nginx, y `/api` va al backend. El `npm run dev` queda para trabajar sin Docker.
 
 ## Cómo se conecta Altium
 

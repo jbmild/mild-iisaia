@@ -9,7 +9,8 @@ import { ComponentService } from "./service/component-service";
 
 const allowedOrigins = new Set(["http://localhost:5173", "http://127.0.0.1:5173"]);
 
-const catalogPath = path.resolve(__dirname, "../../data/component-tables.json");
+const catalogPath =
+  process.env.CATALOG_PATH ?? path.resolve(__dirname, "../../data/component-tables.json");
 const tables = loadCatalog(catalogPath);
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL ?? "postgres://components:components@localhost:5432/components",
@@ -35,6 +36,6 @@ app.use((req, res, next) => {
 app.use("/api", componentRouter(new ComponentController(service)));
 
 const port = Number(process.env.PORT ?? 3000);
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`API en http://localhost:${port}`);
 });

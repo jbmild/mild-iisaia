@@ -11,6 +11,34 @@ services:
       - pgdata:/var/lib/postgresql/data
       - ./db/001_tables.sql:/docker-entrypoint-initdb.d/001_tables.sql:ro
       - ./db/002_seed.sql:/docker-entrypoint-initdb.d/002_seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U components -d components"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: postgres://components:components@postgres:5432/components
+      PORT: "3000"
+      CATALOG_PATH: /data/component-tables.json
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
 
 volumes:
   pgdata:
