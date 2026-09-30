@@ -76,6 +76,7 @@ Un gestor de componentes para Altium, a partir de `cdb.xls`. La base se conecta 
 - No hay `id` ni fechas. Altium convierte cada columna en un parámetro o en un modelo.
 - Celdas vacías se guardan como NULL. Todas las columnas son texto, porque los valores del Excel son texto (`5VDC`, `10A`).
 - `docker compose up --build -d` levanta las tres cosas. En Docker la interfaz es el build de Vite servido por nginx, y `/api` va al backend. El `npm run dev` queda para trabajar sin Docker.
+- La interfaz usa el cromado de Altium Designer: paneles carbón, grilla densa y el naranja `#e87722` solo en lo activo (tipo elegido, botón principal, fila bajo el cursor).
 
 ## Cómo se conecta Altium
 
@@ -107,3 +108,4 @@ Al cambiar de tipo, la tabla anterior quedaba un instante bajo el título nuevo.
 
 1. Armar el gestor de componentes para Altium a partir de `cdb.xls`, con React, TypeScript y PostgreSQL, en capas router → controller → service → repository → entity, y verificar qué campos necesita la base para que Altium se conecte.
 2. Una tabla por hoja, no una tabla única con vistas. Clave nueva `Part Number`, dejando `Manufacturer PN` como en el Excel.
+3. Hacer la interfaz con el cromado de Altium Designer: oscura, grilla densa, naranja solo en lo activo.
