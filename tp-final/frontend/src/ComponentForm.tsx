@@ -70,7 +70,9 @@ export function ComponentForm({ table, initial, onCancel, onSaved }: Props) {
         onMouseDown={(event) => event.stopPropagation()}
         onSubmit={onSubmit}
       >
-        <h2 id="form-title">{initial ? "Editar componente" : "Nuevo componente"}</h2>
+        <h2 id="form-title" className="panel-title">
+          {initial ? "Editar componente" : "Nuevo componente"}
+        </h2>
         <p className="hint">{table.name}. Los nombres son los que lee Altium.</p>
         {error ? <p className="banner">{error}</p> : null}
         <div className="fields">

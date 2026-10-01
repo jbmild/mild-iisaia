@@ -64,6 +64,18 @@ export function App() {
     );
   }, [query, rows, table]);
 
+  const status = !selected
+    ? loading
+      ? "Cargando…"
+      : "Sin tabla"
+    : loading
+      ? `${selected} · Cargando…`
+      : query.trim()
+        ? `${selected} · ${visible.length} de ${rows.length}`
+        : rows.length === 1
+          ? `${selected} · 1 componente`
+          : `${selected} · ${rows.length} componentes`;
+
   function choose(name: string) {
     if (name === selected) {
       return;
@@ -89,8 +101,12 @@ export function App() {
 
   return (
     <div className="app">
+      <header className="app-bar">
+        <span className="mark" aria-hidden="true" />
+        Gestor de componentes
+      </header>
       <aside className="types">
-        <p className="brand">Componentes</p>
+        <p className="panel-title">Tablas</p>
         <nav aria-label="Tipos">
           {types.map((item) => (
             <button
@@ -107,18 +123,7 @@ export function App() {
       </aside>
       <main>
         <header className="toolbar">
-          <div>
-            <h1>{selected || "Gestor de componentes"}</h1>
-            <p>
-              {loading
-                ? "Cargando…"
-                : query.trim()
-                  ? `${visible.length} de ${rows.length}`
-                  : rows.length === 1
-                    ? "1 componente"
-                    : `${rows.length} componentes`}
-            </p>
-          </div>
+          <h1>{selected || "Gestor de componentes"}</h1>
           <div className="toolbar-actions">
             <input
               type="search"
@@ -184,6 +189,7 @@ export function App() {
           </div>
         ) : null}
       </main>
+      <footer className="status-bar">{status}</footer>
       {table && editing !== undefined ? (
         <ComponentForm
           table={table}
