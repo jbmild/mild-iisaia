@@ -1,5 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ComponentRow, ComponentTable, deleteComponent, listComponents, listTypes } from "./api";
+import {
+  ComponentRow,
+  ComponentTable,
+  currentUser,
+  deleteComponent,
+  listComponents,
+  listTypes,
+  logout,
+} from "./api";
+import { AuthScreen } from "./AuthScreen";
 import { ComponentForm } from "./ComponentForm";
 
 export function App() {
@@ -11,6 +20,8 @@ export function App() {
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<ComponentRow | null | undefined>(undefined);
   const [pendingDelete, setPendingDelete] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
   const table = types.find((item) => item.name === selected);
 
@@ -28,6 +39,16 @@ export function App() {
   }, []);
 
   useEffect(() => {
+    currentUser()
+      .then((user) => setEmail(user.email))
+      .catch(() => setEmail(null))
+      .finally(() => setAuthLoading(false));
+  }, []);
+
+  useEffect(() => {
+    if (!email) {
+      return;
+    }
     listTypes()
       .then((loaded) => {
         setTypes(loaded);
@@ -41,7 +62,7 @@ export function App() {
         setError(caught instanceof Error ? caught.message : "No se pudo hablar con la API.");
         setLoading(false);
       });
-  }, []);
+  }, [email]);
 
   useEffect(() => {
     if (!selected) {
@@ -99,11 +120,42 @@ export function App() {
     }
   }
 
+  function signOut() {
+    void logout().catch(() => undefined);
+    setEmail(null);
+    setTypes([]);
+    setSelected("");
+    setRows([]);
+    setQuery("");
+    setError(null);
+    setLoading(true);
+    setEditing(undefined);
+    setPendingDelete(null);
+  }
+
+  if (authLoading) {
+    return (
+      <div className="auth-screen">
+        <p className="empty">Cargando…</p>
+      </div>
+    );
+  }
+
+  if (!email) {
+    return <AuthScreen onLoggedIn={setEmail} />;
+  }
+
   return (
     <div className="app">
       <header className="app-bar">
         <span className="mark" aria-hidden="true" />
         Gestor de componentes
+        <div className="app-bar-session">
+          <span>{email}</span>
+          <button type="button" onClick={signOut}>
+            Salir
+          </button>
+        </div>
       </header>
       <aside className="types">
         <p className="panel-title">Tablas</p>

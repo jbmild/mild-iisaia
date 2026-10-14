@@ -12,9 +12,9 @@ Desde `tp-final/`, un solo comando levanta la base, la API y la interfaz:
 docker compose up --build -d
 ```
 
-La interfaz queda en `http://localhost:5173`. Nginx reenvía `/api` al backend. La API también se puede llamar en `http://localhost:3000`. PostgreSQL 16 queda en `localhost:5432`. Base, usuario y contraseña: `components`.
+La interfaz queda en `http://localhost:5173`. La primera pantalla pide iniciar sesión; desde ahí mismo se puede crear una cuenta con correo y contraseña. Recién después se ven las tablas de componentes. Nginx reenvía `/api` al backend. La API también se puede llamar en `http://localhost:3000`. PostgreSQL 16 queda en `localhost:5432`. Base, usuario y contraseña: `components`.
 
-Los scripts `db/001_tables.sql` y `db/002_seed.sql` corren solo la primera vez, cuando el volumen está vacío. Para volver a cargar el Excel hay que borrar el volumen:
+Los scripts `db/001_tables.sql`, `db/002_seed.sql` y `db/003_users.sql` corren solo la primera vez, cuando el volumen está vacío. Para volver a cargar el Excel hay que borrar el volumen (eso borra también las cuentas registradas):
 
 ```bash
 docker compose down -v
@@ -41,7 +41,11 @@ La API queda en `http://localhost:3000`. Usa `DATABASE_URL` si está definida; s
 
 | Método | Ruta | Respuesta |
 |--------|------|-----------|
-| `GET` | `/api/component-types` | `200` catálogo de tablas y columnas |
+| `POST` | `/api/auth/register` | `201` cuenta creada · `400` correo o contraseña inválidos · `409` correo ya registrado |
+| `POST` | `/api/auth/login` | `200` sesión creada (cookie) · `400` inválido · `401` credenciales incorrectas |
+| `POST` | `/api/auth/logout` | `204` sesión cerrada |
+| `GET` | `/api/auth/me` | `200` correo · `401` sin sesión |
+| `GET` | `/api/component-types` | `200` catálogo de tablas y columnas · `401` sin sesión |
 | `GET` | `/api/components/:type` | `200` filas · `404` tipo desconocido |
 | `POST` | `/api/components/:type` | `201` fila creada · `400` falta un campo obligatorio · `409` `Part Number` repetido |
 | `GET` | `/api/components/:type/:partNumber` | `200` fila · `404` no existe |
@@ -50,7 +54,9 @@ La API queda en `http://localhost:3000`. Usa `DATABASE_URL` si está definida; s
 
 El `Part Number` va codificado en la ruta (`encodeURIComponent`). Puede traer espacios y `/`. Obligatorios en el cuerpo: `Part Number`, `Library Ref` y `Footprint Ref`.
 
-El servidor está en `backend/src`: `router` recibe la ruta, `controller` traduce HTTP, `service` valida, `repository` habla con PostgreSQL y `entity` es el componente más el catálogo de tablas. Hay una sola entidad: el tipo es el nombre de la tabla y las columnas salen del catálogo. Un nombre de tabla o de columna que no esté ahí se rechaza.
+Las rutas de componentes y tipos piden sesión: sin la cookie devuelven `401`. No es solo la pantalla: la API también está cerrada.
+
+El servidor está en `backend/src`: `router` recibe la ruta, `controller` traduce HTTP, `service` valida, `repository` habla con PostgreSQL y `entity` es el componente más el catálogo de tablas. Hay una sola entidad: el tipo es el nombre de la tabla y las columnas salen del catálogo. Un nombre de tabla o de columna que no esté ahí se rechaza. La sesión tiene una capa paralela con el mismo formato: `auth-router`, `auth-controller`, `auth-service` y `user-repository`, más `session.ts`, que lee la cookie y corta con `401` cuando no hay sesión.
 
 ### Interfaz
 
@@ -61,7 +67,7 @@ npm install
 npm run dev
 ```
 
-Abrir `http://localhost:5173`. El dev server reenvía `/api` a `localhost:3000`. A la izquierda están los tipos; la tabla muestra las columnas de ese tipo. Nuevo, editar y borrar usan el formulario. Los nombres de columna quedan como en Altium.
+Abrir `http://localhost:5173`. El dev server reenvía `/api` a `localhost:3000`. Sin sesión, `/` muestra la pantalla de iniciar sesión o crear cuenta. Con sesión, a la izquierda están los tipos; la tabla muestra las columnas de ese tipo. Nuevo, editar y borrar usan el formulario. El correo y el botón «Salir» quedan arriba a la derecha. Los nombres de columna quedan como en Altium.
 
 ## Qué me propuse construir
 
@@ -77,6 +83,10 @@ Un gestor de componentes para Altium, a partir de `cdb.xls`. La base se conecta 
 - Celdas vacías se guardan como NULL. Todas las columnas son texto, porque los valores del Excel son texto (`5VDC`, `10A`).
 - `docker compose up --build -d` levanta las tres cosas. En Docker la interfaz es el build de Vite servido por nginx, y `/api` va al backend. El `npm run dev` queda para trabajar sin Docker.
 - La interfaz usa el cromado de Altium Designer: paneles carbón, grilla densa y el naranja `#e87722` solo en lo activo (tipo elegido, botón principal, fila bajo el cursor).
+- Registro y login con correo y contraseña. El correo no se verifica. La contraseña se guarda hasheada con scrypt (nativo de Node, sin dependencias nuevas), como `scrypt:N:r:p:salt:hash` en `app.users`. La base nunca ve la contraseña. Si el correo no existe, el login quema un scrypt igual: el tiempo de respuesta no delata qué correos están registrados.
+- La sesión es un token opaco de 32 bytes guardado en `app.sessions` con vencimiento a 7 días, entregado en una cookie `HttpOnly`. No hay JWT: revocar es borrar la fila, y «Salir» borra la fila.
+- `app.users` y `app.sessions` viven en el schema `app`, como `app.part_number`: Altium no las habilita. El catálogo `component-tables.json` y `db/generate.py` no se tocan.
+- Esta feature se hizo sin ramas ni pull requests, salteándome la disciplina de PRs de esta entrega.
 
 ## Cómo se conecta Altium
 
@@ -109,3 +119,4 @@ Al cambiar de tipo, la tabla anterior quedaba un instante bajo el título nuevo.
 1. Armar el gestor de componentes para Altium a partir de `cdb.xls`, con React, TypeScript y PostgreSQL, en capas router → controller → service → repository → entity, y verificar qué campos necesita la base para que Altium se conecte.
 2. Una tabla por hoja, no una tabla única con vistas. Clave nueva `Part Number`, dejando `Manufacturer PN` como en el Excel.
 3. Hacer la interfaz con el cromado de Altium Designer: oscura, grilla densa, naranja solo en lo activo.
+4. Agregar registro y login de usuarios: correo y contraseña (hasheada) en una tabla nueva de PostgreSQL, pantalla de login en `/` y las tablas de componentes solo después de iniciar sesión.

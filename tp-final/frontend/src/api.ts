@@ -52,3 +52,25 @@ export function updateComponent(type: string, partNumber: string, row: Component
 export function deleteComponent(type: string, partNumber: string): Promise<void> {
   return request(componentPath(type, partNumber), { method: "DELETE" });
 }
+
+export function register(email: string, password: string): Promise<{ email: string }> {
+  return request("/api/auth/register", {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+  });
+}
+
+export function login(email: string, password: string): Promise<{ email: string }> {
+  return request("/api/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+  });
+}
+
+export function logout(): Promise<void> {
+  return request("/api/auth/logout", { method: "POST" });
+}
+
+export function currentUser(): Promise<{ email: string }> {
+  return request("/api/auth/me");
+}
