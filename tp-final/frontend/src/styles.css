@@ -94,6 +94,19 @@ button.danger {
   flex: none;
 }
 
+.app-bar-session {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #9aa3ad;
+}
+
+.app-bar-session button {
+  padding: 0.05rem 0.5rem;
+  font-size: 0.75rem;
+}
+
 .status-bar {
   border-top: 1px solid #000;
   color: #9aa3ad;
@@ -365,6 +378,44 @@ abbr {
   justify-content: flex-end;
   gap: 0.4rem;
   margin-top: 0.9rem;
+}
+
+.auth-screen {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #1e2126;
+  padding: 1.5rem;
+}
+
+.auth-screen > .empty {
+  color: #9aa3ad;
+}
+
+.auth-card {
+  width: min(24rem, 100%);
+  background: #2a2e34;
+  border: 1px solid #454b54;
+}
+
+.auth-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1rem;
+}
+
+.auth-card .fields {
+  grid-template-columns: 1fr;
+}
+
+.auth-switch {
+  margin: 0;
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #9aa3ad;
 }
 
 @media (max-width: 800px) {
