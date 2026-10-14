@@ -158,7 +158,7 @@ export function App() {
         </div>
       </header>
       <aside className="types">
-        <p className="panel-title">Tablas</p>
+        <p className="panel-title">Categorías</p>
         <nav aria-label="Tipos">
           {types.map((item) => (
             <button
